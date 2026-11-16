@@ -3,10 +3,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import {
   Terminal,
-  Database,
-  PanelsTopLeft,
-  Network,
-  Workflow,
+  Calculator,
   ArrowUpRight,
   Search,
   Layers,
@@ -22,7 +19,7 @@ import {
 } from '@/lib/content'
 import { useProgress } from '@/lib/progress'
 import { Heading, NeoBadge, NeoProgressBar } from './ui'
-const icons = [Terminal, Database, PanelsTopLeft, Workflow, Network]
+const icons = [Terminal, Calculator]
 export function CourseCard({ course }: { course: Course }) {
   const i = courses.findIndex((item) => item.id === course.id),
     Icon = icons[i],
@@ -32,7 +29,7 @@ export function CourseCard({ course }: { course: Course }) {
     <>
       <div className={'cover cover' + i}>
         <span className="coverlabel">
-          {course.available ? 'ITDS120' : course.category}
+          {course.id.toUpperCase()}
         </span>
         <span className="artlines" aria-hidden="true">
           ✦
@@ -46,7 +43,7 @@ export function CourseCard({ course }: { course: Course }) {
       </div>
       <div className="coursebody">
         <NeoBadge color={course.available ? 'mint' : 'cream'}>
-          {course.available ? '● เปิดให้เรียน' : '◷ เร็ว ๆ นี้'}
+          {course.available ? '● เปิดให้เรียน' : '◷ กำลังจะเปิด'}
         </NeoBadge>
         <h3>{course.title}</h3>
         <p>{course.description}</p>
@@ -113,7 +110,7 @@ export function Catalog() {
         </label>
         {[
           [category, c, ['ทุกหมวดวิชา', ...courses.map((x) => x.category)]],
-          [availability, a, ['ทุกสถานะ', 'เปิดให้เรียน', 'เร็ว ๆ นี้']],
+          [availability, a, ['ทุกสถานะ', 'เปิดให้เรียน', 'กำลังจะเปิด']],
         ].map((entry, i) => {
           const [v, set, items] = entry as [
             string,
@@ -137,7 +134,7 @@ export function Catalog() {
       <p className="mono" role="status">
         {list.length} รายวิชา
       </p>
-      <div className="grid3">
+      <div className="grid2">
         {list.map((course) => (
           <CourseCard course={course} key={course.id} />
         ))}

@@ -82,19 +82,11 @@ export default function Home() {
             ดูรายวิชาทั้งหมด <ArrowRight size={17} />
           </Link>
         </div>
-        <div className="grid3">
-          {courses.slice(0, 3).map((course) => (
+        <div className="grid2">
+          {courses.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
         </div>
-        <details className="upcoming">
-          <summary>ดูวิชาอื่นที่กำลังจะเปิด</summary>
-          <div className="grid3">
-            {courses.slice(3).map((course) => (
-              <CourseCard key={course.id} course={course} />
-            ))}
-          </div>
-        </details>
       </section>
       <section className="band">
         <div className="container section">
