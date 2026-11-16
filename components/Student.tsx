@@ -13,7 +13,11 @@ import {
   Trophy,
   Flame,
   Star,
-  Bug,
+  BookOpen,
+  Braces,
+  FileText,
+  Grid3X3,
+  Table2,
   Terminal,
   LockKeyhole,
   Check,
@@ -132,49 +136,63 @@ export function Student({ section }: { section: keyof typeof sections }) {
     next = exercises.find((e) => !done.includes(e.id)) || exercises[0],
     level = 1 + Math.floor(xp / 200),
     name = data.user?.name || 'ผู้เรียนรับเชิญ'
+  const mastered = modules.map((m) => {
+    const items = exercises.filter((e) => e.module === m.id)
+    const solved = items.filter((e) => done.includes(e.id)).length
+    return {
+      m,
+      solved,
+      total: items.length,
+      value: Math.round((solved * 100) / items.length),
+    }
+  })
+  const topicIcons = [BookOpen, Braces, FileText, Grid3X3, Table2]
   const awards = [
     {
-      title: 'ก้าวแรกกับ Hello World',
-      description: 'ทำโจทย์ข้อแรกสำเร็จ',
-      earned: data.submissions.length > 0,
+      title: 'โค้ดแรกผ่านแล้ว',
+      description: 'ส่งคำตอบที่ผ่านครั้งแรก',
+      count: data.submissions.length,
+      target: 1,
+      unit: 'ข้อ',
       Icon: Terminal,
     },
     {
       title: 'มือใหม่ Python',
-      description: 'ทำโจทย์ Python สำเร็จ 20 ข้อ',
-      earned: data.submissions.length >= 20,
+      description: 'สะสมโจทย์ Python ที่ทำสำเร็จ',
+      count: data.submissions.length,
+      target: 20,
+      unit: 'ข้อ',
       Icon: Star,
     },
-    {
-      title: 'นักล่าบั๊ก',
-      description: 'แก้โจทย์หาข้อผิดพลาดสำเร็จ 10 ข้อ',
-      earned:
-        exercises.filter((e) => e.type === 'DEBUGGING' && done.includes(e.id))
-          .length >= 10,
-      Icon: Bug,
-    },
+    ...mastered.map(({ m, solved, total }, i) => ({
+      title: m.title,
+      description: 'ทำโจทย์ประจำบทให้ครบ',
+      count: solved,
+      target: total,
+      unit: 'ข้อ',
+      Icon: topicIcons[i] ?? BookOpen,
+    })),
     {
       title: 'เรียนต่อเนื่อง',
-      description: 'ทำโจทย์ต่อเนื่องครบ 7 วัน',
-      earned: earnedWeek,
+      description: 'ทำโจทย์สำเร็จทุกวันติดต่อกันหนึ่งสัปดาห์',
+      count: earnedWeek ? 7 : streak,
+      target: 7,
+      unit: 'วัน',
       Icon: Flame,
     },
     {
       title: 'เซียน Python',
-      description: 'ทำโจทย์ ITDS120 ครบทุกข้อ',
-      earned: done.length === exercises.length,
+      description: 'ทำโจทย์เตรียมไฟนอล ITDS120 ครบทั้งห้าบท',
+      count: done.length,
+      target: exercises.length,
+      unit: 'ข้อ',
       Icon: Trophy,
     },
-  ]
-  const mastered = modules.map((m) => {
-    const items = exercises.filter((e) => e.module === m.id)
-    return {
-      m,
-      value: Math.round(
-        (items.filter((e) => done.includes(e.id)).length * 100) / items.length,
-      ),
-    }
-  })
+  ].map((award) => ({
+    ...award,
+    earned: award.count >= award.target,
+    count: Math.min(award.count, award.target),
+  }))
   const recommended = [...mastered]
     .sort((a, b) => a.value - b.value)
     .flatMap(({ m }) =>
@@ -191,17 +209,24 @@ export function Student({ section }: { section: keyof typeof sections }) {
   )
   const achievements = (
     <div className="grid3">
-      {awards.map(({ title, description, earned, Icon }) => (
-        <NeoCard key={title} className={earned ? 'level' : ''}>
-          <Icon size={36} />
-          <h3>{title}</h3>
-          <p>{description}</p>
-          <NeoBadge color={earned ? 'mint' : 'cream'}>
-            {earned ? <Check size={13} /> : <LockKeyhole size={13} />}{' '}
-            {earned ? 'ได้รับแล้ว' : 'ยังไม่ปลดล็อก'}
-          </NeoBadge>
-        </NeoCard>
-      ))}
+      {awards.map(
+        ({ title, description, earned, count, target, unit, Icon }) => (
+          <NeoCard key={title} className={earned ? 'level' : ''}>
+            <Icon size={36} />
+            <h3>{title}</h3>
+            <p>{description}</p>
+            <NeoProgressBar value={Math.round((count * 100) / target)} />
+            <p className="mono">
+              {count}/{target} {unit}
+              {!earned && ` · อีก ${target - count} ${unit}`}
+            </p>
+            <NeoBadge color={earned ? 'mint' : 'cream'}>
+              {earned ? <Check size={13} /> : <LockKeyhole size={13} />}{' '}
+              {earned ? 'ได้รับแล้ว' : 'ยังไม่ปลดล็อก'}
+            </NeoBadge>
+          </NeoCard>
+        ),
+      )}
     </div>
   )
   return (
@@ -287,8 +312,7 @@ export function Student({ section }: { section: keyof typeof sections }) {
                 {awards
                   .filter((a) => a.earned)
                   .map((a) => a.title)
-                  .join(' · ') ||
-                  'ทำโจทย์ให้สำเร็จหนึ่งข้อเพื่อรับเหรียญก้าวแรกกับ Hello World'}
+                  .join(' · ') || 'ทำโจทย์ให้สำเร็จหนึ่งข้อเพื่อรับเหรียญ “โค้ดแรกผ่านแล้ว”'}
               </p>
             </div>
             <div className="panel">
