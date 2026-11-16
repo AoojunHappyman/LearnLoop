@@ -58,7 +58,7 @@ export function CoursePage() {
       <div className="spaced">
         <small>เส้นทางการเรียน</small>
         <h2>บทเรียนในวิชานี้</h2>
-        <p>ทบทวนก่อนสอบไฟนอล บทละ 4 โจทย์</p>
+        <p>ทบทวนก่อนสอบไฟนอล บทละ 10 โจทย์</p>
       </div>
       <div className="list">
         {modules.map((m) => {
@@ -137,3 +137,4 @@ export function ModulePage({ id }: { id: number }) {
     </div>
   )
 }
+
