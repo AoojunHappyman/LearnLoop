@@ -44,7 +44,7 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
     reduce = useReducedMotion(),
     index = exercises.findIndex((x) => x.id === e.id),
     code = e.engine === 'python-pattern',
-    key = 'learnloop:draft:' + e.id
+    key = 'learnloop:coding-draft:' + e.id
   const runRef = useRef<(submit: boolean) => void>(() => {})
   useEffect(() => {
     setAnswer(localStorage.getItem(key) ?? (code ? e.starter : ''))
@@ -303,3 +303,4 @@ function TestCasePanel({
     </div>
   )
 }
+
