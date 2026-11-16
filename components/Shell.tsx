@@ -8,7 +8,6 @@ const links = [
   ['หน้าแรก', '/'],
   ['สำรวจรายวิชา', '/courses'],
   ['ฝึกทำโจทย์', '/practice/dict-key'],
-  ['อันดับผู้เรียน', '/leaderboard'],
 ]
 export function Logo() {
   return (

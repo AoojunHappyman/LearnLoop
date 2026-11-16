@@ -35,7 +35,6 @@ const sections = {
   dashboard: 'ภาพรวมการเรียน',
   profile: 'โปรไฟล์',
   achievements: 'เหรียญรางวัล',
-  leaderboard: 'อันดับผู้เรียน',
 }
 function Sidebar() {
   const path = usePathname().replace(/\/$/, '')
@@ -125,7 +124,7 @@ function ActivityChart({ week }: { week: { day: string; solved: number }[] }) {
     </section>
   )
 }
-export function Student({ section }: { section: string }) {
+export function Student({ section }: { section: keyof typeof sections }) {
   const { data, logout } = useProgress(),
     done = currentSubmissions(data.submissions).map((x) => x.exerciseId),
     { xp, week, streak, earnedWeek } = analytics(data.submissions),
@@ -320,38 +319,13 @@ export function Student({ section }: { section: string }) {
             )}
           </div>
         </>
-      ) : section === 'achievements' ? (
+      ) : (
         <>
           <Heading kicker="เหรียญสะสมของคุณ" title="เหรียญรางวัล">
             {awards.filter((a) => a.earned).length} จาก {awards.length}{' '}
             เหรียญที่ปลดล็อกแล้ว
           </Heading>
           {achievements}
-        </>
-      ) : (
-        <>
-          <Heading kicker="ชุมชนผู้เรียน · อันดับตัวอย่าง" title="อันดับผู้เรียน">
-            เปรียบเทียบ XP ที่คุณสะสมในเบราว์เซอร์นี้กับคะแนนของผู้เรียนตัวอย่าง
-          </Heading>
-          <section className="panel">
-            {[
-              { n: 'Mira K.', xp: 640 },
-              { n: 'Arun P.', xp: 515 },
-              { n: 'Nina S.', xp: 390 },
-              { n: 'Theo L.', xp: 240 },
-              { n: name + ' (คุณ)', xp },
-            ]
-              .sort((a, b) => b.xp - a.xp)
-              .map((s, i) => (
-                <div className="listrow spaced" key={s.n}>
-                  <div className="row">
-                    <span className="num">{i + 1}</span>
-                    <strong>{s.n}</strong>
-                  </div>
-                  <NeoBadge color="yellow">{s.xp} XP</NeoBadge>
-                </div>
-              ))}
-          </section>
         </>
       )}
     </div>
