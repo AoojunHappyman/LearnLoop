@@ -126,8 +126,8 @@ export default function Home() {
         <h2>วันนี้อยากฝึกอะไร?</h2>
         <div className="featurelinks">
           {[
-            [Code2, 'ฝึกเขียนโค้ด', '/practice/hello-loop'],
-            [Zap, 'ตรวจคำตอบทันที', '/practice/missing-quote'],
+            [Code2, 'ฝึกเขียนโค้ด', '/practice/dict-key'],
+            [Zap, 'ตรวจคำตอบทันที', '/practice/function-indent'],
             [ChartNoAxesColumnIncreasing, 'ความก้าวหน้า', '/dashboard'],
             [ClipboardList, 'เตรียมสอบ', '/exams'],
             [Target, 'XP และเหรียญรางวัล', '/achievements'],

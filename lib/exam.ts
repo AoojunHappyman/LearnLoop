@@ -203,4 +203,6 @@ export const topicPractice: Record<string, string> = {
   Dictionary: 'dict-key',
   Function: 'return-total',
   'File I/O': 'safe-file',
+  NumPy: 'numpy-axis',
+  Pandas: 'pandas-select',
 }

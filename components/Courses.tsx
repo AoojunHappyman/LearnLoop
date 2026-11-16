@@ -12,7 +12,14 @@ import {
   Layers,
   Code2,
 } from 'lucide-react'
-import { Course, courses, modules, exercises, coursePath } from '@/lib/content'
+import {
+  Course,
+  courses,
+  modules,
+  exercises,
+  currentSubmissions,
+  coursePath,
+} from '@/lib/content'
 import { useProgress } from '@/lib/progress'
 import { Heading, NeoBadge, NeoProgressBar } from './ui'
 const icons = [Terminal, Database, PanelsTopLeft, Workflow, Network]
@@ -20,6 +27,7 @@ export function CourseCard({ course }: { course: Course }) {
   const i = courses.findIndex((item) => item.id === course.id),
     Icon = icons[i],
     { data } = useProgress()
+  const completed = currentSubmissions(data.submissions).length
   const body = (
     <>
       <div className={'cover cover' + i}>
@@ -53,13 +61,11 @@ export function CourseCard({ course }: { course: Course }) {
               </span>
             </div>
             <div className="metadata">
-              Python · ระดับต้น <ArrowUpRight />
+              Python · เตรียมไฟนอล <ArrowUpRight />
             </div>
-            {data.submissions.length > 0 && (
+            {completed > 0 && (
               <NeoProgressBar
-                value={Math.round(
-                  (data.submissions.length * 100) / exercises.length,
-                )}
+                value={Math.round((completed * 100) / exercises.length)}
               />
             )}
           </>

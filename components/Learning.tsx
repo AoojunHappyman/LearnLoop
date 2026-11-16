@@ -4,6 +4,7 @@ import { ArrowRight, ChevronRight, Check, BookOpen } from 'lucide-react'
 import {
   coursePath,
   programmingCourse,
+  currentSubmissions,
   modules,
   exercises,
   modulePath,
@@ -14,7 +15,8 @@ import { Heading, NeoBadge, NeoButton, NeoProgressBar } from './ui'
 import { useProgress } from '@/lib/progress'
 export function CoursePage() {
   const { data } = useProgress(),
-    done = data.submissions.map((x) => x.exerciseId),
+    current = currentSubmissions(data.submissions),
+    done = current.map((x) => x.exerciseId),
     pct = Math.round((done.length * 100) / exercises.length),
     next = exercises.find((e) => !done.includes(e.id)) || exercises[0]
   return (
@@ -26,7 +28,7 @@ export function CoursePage() {
         kicker="ITDS120 · การเขียนโปรแกรมด้วย Python"
         title={programmingCourse.title}
       >
-        ปูพื้นฐาน Python ผ่านบทเรียนสั้น ๆ ฝึกไล่การทำงานของโค้ด แล้วลงมือแก้โจทย์ด้วยตัวเอง
+        เตรียมสอบไฟนอลด้วยตัวอย่างโค้ดและแบบฝึกหัดใน 5 หัวข้อของ ITDS120
       </Heading>
       <div className="grid2">
         <section className="panel level">
@@ -35,7 +37,7 @@ export function CoursePage() {
           <NeoProgressBar value={pct} />
           <p>
             {done.length} / {exercises.length} ข้อ ·{' '}
-            {data.submissions.reduce((s, x) => s + x.xp, 0)} XP ที่ได้รับ
+            {current.reduce((s, x) => s + x.xp, 0)} XP ที่ได้รับ
           </p>
           <div className="actions">
             <NeoButton href={modulePath(next.module)}>
@@ -48,15 +50,15 @@ export function CoursePage() {
           <h3>เป้าหมายการเรียนรู้</h3>
           <ul>
             <li>อ่านโค้ด Python ไล่ลำดับการทำงาน และแก้ข้อผิดพลาดได้</li>
-            <li>เขียนขั้นตอนวิธีโดยใช้เงื่อนไข การวนซ้ำ และฟังก์ชันได้</li>
-            <li>จัดการข้อมูลด้วยคอลเลกชัน สตริง และไฟล์ได้</li>
+            <li>ติดตามค่าที่อ่านจาก Dictionary ค่าที่ฟังก์ชันคืน และตำแหน่งอ่านไฟล์ได้</li>
+            <li>เลือกแกนคำนวณใน NumPy และกรองหรือสรุปตารางด้วย Pandas ได้</li>
           </ul>
         </section>
       </div>
       <div className="spaced">
         <small>เส้นทางการเรียน</small>
         <h2>บทเรียนในวิชานี้</h2>
-        <p>บทเรียนที่จัดขึ้นสำหรับฝึกด้วยตนเอง</p>
+        <p>ทบทวนก่อนสอบไฟนอล บทละ 4 โจทย์</p>
       </div>
       <div className="list">
         {modules.map((m) => {
@@ -102,14 +104,13 @@ export function ModulePage({ id }: { id: number }) {
         {m.summary}
       </Heading>
       <section className="panel level">
-        <small>เป้าหมายการเรียนรู้</small>
-        <ul>
-          {exercises
-            .filter((e) => e.module === id)
-            .map((e) => (
-              <li key={e.id}>{e.prompt}</li>
-            ))}
-        </ul>
+        <h2>ทบทวนก่อนทำโจทย์</h2>
+        <p>{m.lesson}</p>
+        <h3>ตัวอย่าง</h3>
+        <pre>{m.example}</pre>
+        <h3>ผลลัพธ์</h3>
+        <pre>{m.output}</pre>
+        <p>{m.explanation}</p>
       </section>
       <h2 className="spaced">แบบฝึกหัด</h2>
       <div className="list">

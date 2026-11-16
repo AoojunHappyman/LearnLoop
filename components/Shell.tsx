@@ -7,7 +7,7 @@ import { useProgress } from '@/lib/progress'
 const links = [
   ['หน้าแรก', '/'],
   ['สำรวจรายวิชา', '/courses'],
-  ['ฝึกทำโจทย์', '/practice/hello-loop'],
+  ['ฝึกทำโจทย์', '/practice/dict-key'],
   ['อันดับผู้เรียน', '/leaderboard'],
 ]
 export function Logo() {

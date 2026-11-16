@@ -26,6 +26,7 @@ import {
   modules,
   coursePath,
   programmingCourse,
+  currentSubmissions,
   modulePath,
   practicePath,
 } from '@/lib/content'
@@ -126,7 +127,7 @@ function ActivityChart({ week }: { week: { day: string; solved: number }[] }) {
 }
 export function Student({ section }: { section: string }) {
   const { data, logout } = useProgress(),
-    done = data.submissions.map((x) => x.exerciseId),
+    done = currentSubmissions(data.submissions).map((x) => x.exerciseId),
     { xp, week, streak, earnedWeek } = analytics(data.submissions),
     pct = Math.round((done.length * 100) / exercises.length),
     next = exercises.find((e) => !done.includes(e.id)) || exercises[0],
@@ -136,13 +137,13 @@ export function Student({ section }: { section: string }) {
     {
       title: 'ก้าวแรกกับ Hello World',
       description: 'ทำโจทย์ข้อแรกสำเร็จ',
-      earned: done.length > 0,
+      earned: data.submissions.length > 0,
       Icon: Terminal,
     },
     {
       title: 'มือใหม่ Python',
       description: 'ทำโจทย์ Python สำเร็จ 20 ข้อ',
-      earned: done.length >= 20,
+      earned: data.submissions.length >= 20,
       Icon: Star,
     },
     {
@@ -184,7 +185,7 @@ export function Student({ section }: { section: string }) {
   const stats = (
     <div className="grid4">
       <StatCard label="XP ทั้งหมด" value={xp} />
-      <StatCard label="โจทย์ที่ทำสำเร็จ" value={done.length} />
+      <StatCard label="โจทย์ที่ทำสำเร็จ" value={data.submissions.length} />
       <StatCard label="เรียนต่อเนื่อง" value={streak + ' วัน'} />
       <StatCard label="วิชาที่กำลังเรียน" value={done.length && pct < 100 ? 1 : 0} />
     </div>
@@ -299,8 +300,9 @@ export function Student({ section }: { section: string }) {
                   .slice(0, 5)
                   .map((s) => (
                     <p key={s.exerciseId}>
-                      {exercises.find((e) => e.id === s.exerciseId)?.title} · +
-                      {s.xp} XP
+                      {exercises.find((e) => e.id === s.exerciseId)?.title ??
+                        'โจทย์จากบทเรียนเดิม'}{' '}
+                      · +{s.xp} XP
                     </p>
                   ))
               ) : (
