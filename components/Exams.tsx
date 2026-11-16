@@ -7,18 +7,18 @@ import { exam, questions, topicPractice } from '@/lib/exam'
 import { ExamAttempt, practicePath } from '@/lib/content'
 import { Heading, NeoButton, NeoBadge, NeoProgressBar } from './ui'
 const path = '/exams/' + exam.id,
-  key = 'learnloop:exam:v1'
+  key = 'learnloop:exam:itds120-final:v1'
 export function Exams() {
   return (
     <div className="container content">
       <Heading kicker="เตรียมสอบ" title="ข้อสอบฝึกทำ">
-        ฝึกทำข้อสอบแบบจับเวลา แล้วทบทวนผลแยกตามหัวข้อ
+        ฝึกอ่านโค้ดและวิเคราะห์ผลลัพธ์ก่อนสอบไฟนอล พร้อมเฉลยอธิบายรายข้อหลังส่งคำตอบ
       </Heading>
       <div className="panel level">
         <ClipboardList size={36} />
-        <h3>ข้อสอบจำลอง ITDS120</h3>
+        <h3>ข้อสอบเตรียมไฟนอล ITDS120</h3>
         <NeoBadge color="yellow">ข้อสอบฝึกทำสำหรับทบทวนด้วยตนเอง</NeoBadge>
-        <p className="spaced">20 ข้อ · 60 นาที · หลายระดับความยาก</p>
+        <p className="spaced">20 ข้อ · หัวข้อละ 4 ข้อ · 60 นาที</p>
         <p>{exam.topics.join(' · ')}</p>
         <div className="actions">
           <NeoButton href={path}>
@@ -38,7 +38,11 @@ export function ExamRoom() {
   useEffect(() => {
     try {
       const x = JSON.parse(localStorage.getItem(key) || 'null')
-      if (x?.answers?.length === 20 && Number.isFinite(x.deadline)) A(x)
+      if (
+        x?.answers?.length === questions.length &&
+        Number.isFinite(x.deadline)
+      )
+        A(x)
     } catch {}
     R(true)
   }, [])
@@ -62,8 +66,8 @@ export function ExamRoom() {
   const start = () => {
     N(Date.now())
     A({
-      answers: Array(20).fill(-1),
-      deadline: Date.now() + 3600000,
+      answers: Array(questions.length).fill(-1),
+      deadline: Date.now() + exam.minutes * 60_000,
       finished: false,
     })
     I(0)
@@ -81,13 +85,14 @@ export function ExamRoom() {
       </Link>
       <Heading
         kicker="ข้อสอบฝึกทำสำหรับทบทวนด้วยตนเอง"
-        title="ข้อสอบจำลอง ITDS120"
+        title="ข้อสอบเตรียมไฟนอล ITDS120"
       />
       {!ready ? (
         <p>กำลังโหลดการทำข้อสอบ…</p>
       ) : !attempt ? (
         <div className="panel">
           <h3>ก่อนเริ่มทำข้อสอบ</h3>
+          <p>{exam.topics.join(' · ')} — หัวข้อละ 4 ข้อ</p>
           <p>
             ตอบคำถามปรนัย 20 ข้อ ภายใน 60 นาที คุณย้อนกลับไปแก้คำตอบได้ก่อนส่ง
             หากออกจากหน้านี้ เวลาจะยังเดินต่อ ข้อที่เว้นว่างจะได้ 0 คะแนน
@@ -115,33 +120,40 @@ export function ExamRoom() {
             ข้อที่ผิดหรือไม่ได้ตอบ
           </p>
           <h3>ผลรายหัวข้อ</h3>
-          {exam.topics.map((t, i) => {
+          {exam.topics.map((t) => {
             const n = questions.filter(
               (q, j) => q.topic === t && attempt.answers[j] === q.correct,
             ).length
             return (
-              <div className="listrow" key={t}>
-                <strong>
-                  {t} · {n}/4
-                </strong>
-                <Link className="under" href={practicePath(topicPractice[i])}>
-                  ฝึกหัวข้อนี้
-                </Link>
-              </div>
+              <details className="spaced" key={t}>
+                <summary>
+                  {t} · {n}/4 — ดูเฉลย
+                </summary>
+                {questions.map(
+                  (item, i) =>
+                    item.topic === t && (
+                      <div key={i} className="spaced">
+                        <strong>
+                          {i + 1}. {item.prompt}
+                        </strong>
+                        <pre>{item.code}</pre>
+                        <p>
+                          คำตอบของคุณ ·{' '}
+                          {item.choices[attempt.answers[i]] ?? 'ไม่ได้ตอบ'}
+                        </p>
+                        <p>คำตอบที่ถูก · {item.choices[item.correct]}</p>
+                        <p>{item.explanation}</p>
+                      </div>
+                    ),
+                )}
+                {topicPractice[t] && (
+                  <Link className="under" href={practicePath(topicPractice[t])}>
+                    ฝึกโจทย์ {t} เพิ่มเติม
+                  </Link>
+                )}
+              </details>
             )
           })}
-          <details className="spaced">
-            <summary>ทบทวนคำตอบทุกข้อ</summary>
-            {questions.map((q, i) => (
-              <div key={i} className="spaced">
-                <strong>
-                  {i + 1}. {q.prompt}
-                </strong>
-                <p>คำตอบของคุณ · {q.choices[attempt.answers[i]] ?? 'ไม่ได้ตอบ'}</p>
-                <p>คำตอบที่ถูก · {q.choices[q.correct]}</p>
-              </div>
-            ))}
-          </details>
           <NeoButton onClick={start}>ลองอีกครั้ง</NeoButton>
         </section>
       ) : (
@@ -181,6 +193,7 @@ export function ExamRoom() {
               {q.topic} · ข้อที่ {idx + 1} จาก 20
             </small>
             <h3>{q.prompt}</h3>
+            <pre>{q.code}</pre>
             {q.choices.map((c, i) => (
               <button
                 key={c}
