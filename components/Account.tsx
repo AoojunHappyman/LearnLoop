@@ -14,7 +14,7 @@ export function Account({ register }: { register: boolean }) {
     ev.preventDefault()
     const f = new FormData(ev.currentTarget)
     if (register && f.get('password') !== f.get('confirm')) {
-      E('Passwords must match.')
+      E('กรุณากรอกรหัสผ่านทั้งสองช่องให้ตรงกัน')
       return
     }
     login(String(f.get('email')).split('@')[0])
@@ -23,15 +23,14 @@ export function Account({ register }: { register: boolean }) {
   return (
     <div className="container content auth">
       <Heading
-        kicker="LEARNLOOP DEMO"
-        title={register ? 'Get started.' : 'Welcome back.'}
+        kicker="LearnLoop รุ่นทดลอง"
+        title={register ? 'เริ่มใช้งาน' : 'ยินดีต้อนรับกลับมา'}
       />
       <form className="panel" onSubmit={submit}>
         <p className="notice">
-          Browser-local demo. Use a sample email and password. Only your display
-          name is saved.
+          ทดลองใช้งานด้วยอีเมลและรหัสผ่านสมมติ ระบบจะบันทึกเฉพาะชื่อที่ใช้แสดงไว้ในเบราว์เซอร์นี้
         </p>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">อีเมล</label>
         <input
           type="email"
           id="email"
@@ -39,7 +38,7 @@ export function Account({ register }: { register: boolean }) {
           placeholder="student@example.edu"
           required
         />
-        <label htmlFor="password">Demo password</label>
+        <label htmlFor="password">รหัสผ่านสำหรับทดลอง</label>
         <div className="split">
           <input
             type={show ? 'text' : 'password'}
@@ -47,12 +46,12 @@ export function Account({ register }: { register: boolean }) {
             name="password"
             minLength={8}
             required
-            placeholder="At least 8 characters"
+            placeholder="อย่างน้อย 8 ตัวอักษร"
             autoComplete="off"
           />
           <button
             type="button"
-            aria-label={show ? 'Hide password' : 'Show password'}
+            aria-label={show ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
             aria-pressed={show}
             onClick={() => S(!show)}
           >
@@ -61,7 +60,7 @@ export function Account({ register }: { register: boolean }) {
         </div>
         {register && (
           <>
-            <label htmlFor="confirm">Confirm password</label>
+            <label htmlFor="confirm">ยืนยันรหัสผ่าน</label>
             <input
               id="confirm"
               name="confirm"
@@ -76,14 +75,14 @@ export function Account({ register }: { register: boolean }) {
         </p>
         <div className="actions">
           <NeoButton>
-            {register ? 'Create demo profile' : 'Demo login'}{' '}
+            {register ? 'สร้างโปรไฟล์ทดลอง' : 'เข้าสู่ระบบทดลอง'}{' '}
             <ArrowRight size={17} />
           </NeoButton>
         </div>
         <p className="spaced">
-          {register ? 'Already exploring? ' : 'New to LearnLoop? '}
+          {register ? 'เคยใช้งานแล้ว? ' : 'เพิ่งรู้จัก LearnLoop? '}
           <Link className="under" href={register ? '/login' : '/register'}>
-            {register ? 'Login' : 'Get Started'}
+            {register ? 'เข้าสู่ระบบ' : 'เริ่มใช้งาน'}
           </Link>
         </p>
       </form>

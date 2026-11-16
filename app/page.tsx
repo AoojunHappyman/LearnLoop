@@ -21,23 +21,20 @@ export default function Home() {
       <section className="container hero">
         <div className="herocopy">
           <span className="eyebrow">
-            <i /> LEARN. PRACTICE. LEVEL UP.
+            <i /> เรียนรู้ ฝึกฝน ก้าวไปอีกขั้น
           </span>
           <h1>
-            STOP SCROLLING.
+            พักเลื่อนฟีด
             <br />
-            START <mark>LEARNING.</mark>
+            มาเริ่ม <mark>เรียนกัน</mark>
           </h1>
-          <p>
-            Your university courses, practice problems, and progress — all in
-            one place.
-          </p>
+          <p>รวมวิชาเรียน โจทย์ฝึก และความก้าวหน้าของคุณไว้ในที่เดียว</p>
           <div className="actions">
             <NeoButton href="/courses/itds120">
-              Start Learning <ArrowRight size={18} />
+              เริ่มเรียน <ArrowRight size={18} />
             </NeoButton>
             <NeoButton href="/courses" tone="white">
-              <BookOpen size={18} /> Explore Courses
+              <BookOpen size={18} /> สำรวจรายวิชา
             </NeoButton>
           </div>
         </div>
@@ -46,7 +43,7 @@ export default function Home() {
             src="/hero.webp"
             width="1440"
             height="960"
-            alt="A smiling lavender computer perched on textbooks with a matching keyboard"
+            alt="คอมพิวเตอร์สีม่วงยิ้มอยู่บนกองหนังสือ ด้านหน้ามีคีย์บอร์ดสีเดียวกัน"
           />
           <span className="xpsticker">
             <Zap size={16} fill="currentColor" /> +25 XP
@@ -60,12 +57,12 @@ export default function Home() {
               <Icon size={19} />
               {
                 [
-                  'STRUCTURED COURSES',
-                  'HANDS-ON PRACTICE',
-                  'INSTANT FEEDBACK',
-                  'EARN ACHIEVEMENTS',
-                  'STRUCTURED COURSES',
-                  'HANDS-ON PRACTICE',
+                  'บทเรียนเรียงตามลำดับ',
+                  'ฝึกลงมือทำ',
+                  'รู้ผลทันที',
+                  'สะสมเหรียญรางวัล',
+                  'บทเรียนเรียงตามลำดับ',
+                  'ฝึกลงมือทำ',
                 ][i]
               }{' '}
               <b>✦</b>
@@ -76,13 +73,13 @@ export default function Home() {
       <section className="container section">
         <div className="sectionrow">
           <div>
-            <small>THE COURSE LIBRARY</small>
+            <small>คลังรายวิชา</small>
             <h2>
-              Featured courses<span className="purpleperiod">.</span>
+              วิชาแนะนำ<span className="purpleperiod">.</span>
             </h2>
           </div>
           <Link className="textlink" href="/courses">
-            View all courses <ArrowRight size={17} />
+            ดูรายวิชาทั้งหมด <ArrowRight size={17} />
           </Link>
         </div>
         <div className="grid3">
@@ -91,7 +88,7 @@ export default function Home() {
           ))}
         </div>
         <details className="upcoming">
-          <summary>More upcoming subjects</summary>
+          <summary>ดูวิชาอื่นที่กำลังจะเปิด</summary>
           <div className="grid3">
             {courses.slice(3).map((course) => (
               <CourseCard key={course.id} course={course} />
@@ -101,33 +98,21 @@ export default function Home() {
       </section>
       <section className="band">
         <div className="container section">
-          <small>HOW IT WORKS</small>
+          <small>วิธีใช้งาน</small>
           <h2>
-            Your learning loop<span className="purpleperiod">.</span>
+            เรียนกับ LearnLoop<span className="purpleperiod">.</span>
           </h2>
           <div className="grid3">
             {[
-              [
-                Layers,
-                'Pick a Course',
-                'Start with a subject and follow its learning path.',
-              ],
-              [
-                Terminal,
-                'Solve Challenges',
-                'Apply each concept in a focused practice workspace.',
-              ],
-              [
-                Star,
-                'Level Up',
-                'Collect XP and follow your progress as you learn.',
-              ],
+              [Layers, 'เลือกวิชา', 'เลือกวิชาที่สนใจ แล้วเริ่มเรียนตามลำดับบท'],
+              [Terminal, 'ฝึกทำโจทย์', 'ลองใช้สิ่งที่เพิ่งเรียนกับโจทย์ท้ายบท'],
+              [Star, 'เลื่อนระดับ', 'สะสม XP และติดตามพัฒนาการของตัวเอง'],
             ].map(([I, t, d], i) => {
               const Icon = I as typeof Layers
               return (
                 <article className={'card step step' + i} key={i}>
                   <Icon />
-                  <small>STEP 0{i + 1}</small>
+                  <small>ขั้นที่ 0{i + 1}</small>
                   <h3>{String(t)}</h3>
                   <p>{String(d)}</p>
                 </article>
@@ -137,15 +122,15 @@ export default function Home() {
         </div>
       </section>
       <section className="container section">
-        <small>PLATFORM FEATURES</small>
-        <h2>Tools for your next session.</h2>
+        <small>เครื่องมือการเรียน</small>
+        <h2>วันนี้อยากฝึกอะไร?</h2>
         <div className="featurelinks">
           {[
-            [Code2, 'Interactive coding', '/practice/hello-loop'],
-            [Zap, 'Instant feedback', '/practice/missing-quote'],
-            [ChartNoAxesColumnIncreasing, 'Learning progress', '/dashboard'],
-            [ClipboardList, 'Exam preparation', '/exams'],
-            [Target, 'XP and achievements', '/achievements'],
+            [Code2, 'ฝึกเขียนโค้ด', '/practice/hello-loop'],
+            [Zap, 'ตรวจคำตอบทันที', '/practice/missing-quote'],
+            [ChartNoAxesColumnIncreasing, 'ความก้าวหน้า', '/dashboard'],
+            [ClipboardList, 'เตรียมสอบ', '/exams'],
+            [Target, 'XP และเหรียญรางวัล', '/achievements'],
           ].map(([I, t, h]) => {
             const Icon = I as typeof Code2
             return (

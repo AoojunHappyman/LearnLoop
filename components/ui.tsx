@@ -51,7 +51,7 @@ export function NeoProgressBar({ value }: { value: number }) {
     <div
       className="progress"
       role="progressbar"
-      aria-label="Completion"
+      aria-label="ความก้าวหน้า"
       aria-valuenow={value}
       aria-valuemin={0}
       aria-valuemax={100}

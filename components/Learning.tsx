@@ -19,46 +19,43 @@ export function CoursePage() {
   return (
     <div className="container content">
       <Link className="crumb" href="/courses">
-        ← Course library
+        ← กลับไปที่คลังรายวิชา
       </Link>
       <Heading
-        kicker="ITDS120 · Python Programming"
-        title="Fundamentals of Programming"
+        kicker="ITDS120 · การเขียนโปรแกรมด้วย Python"
+        title="พื้นฐานการเขียนโปรแกรม"
       >
-        Build a working knowledge of Python through short lessons, code tracing,
-        and hands-on challenges.
+        ปูพื้นฐาน Python ผ่านบทเรียนสั้น ๆ ฝึกไล่การทำงานของโค้ด แล้วลงมือแก้โจทย์ด้วยตัวเอง
       </Heading>
       <div className="grid2">
         <section className="panel level">
-          <small>COURSE PROGRESS</small>
-          <div className="stat">{pct}% complete</div>
+          <small>ความก้าวหน้าในวิชานี้</small>
+          <div className="stat">{pct}%</div>
           <NeoProgressBar value={pct} />
           <p>
-            {done.length} / {exercises.length} exercises ·{' '}
-            {data.submissions.reduce((s, x) => s + x.xp, 0)} XP earned
+            {done.length} / {exercises.length} ข้อ ·{' '}
+            {data.submissions.reduce((s, x) => s + x.xp, 0)} XP ที่ได้รับ
           </p>
           <div className="actions">
             <NeoButton href={modulePath(next.module)}>
-              Continue Learning <ArrowRight size={17} />
+              เรียนต่อ <ArrowRight size={17} />
             </NeoButton>
           </div>
         </section>
         <section className="panel">
           <BookOpen />
-          <h3>Learning objectives</h3>
+          <h3>เป้าหมายการเรียนรู้</h3>
           <ul>
-            <li>Read, trace, and debug Python programs.</li>
-            <li>
-              Use conditions, loops, and functions to express an algorithm.
-            </li>
-            <li>Process data with collections, strings, and files.</li>
+            <li>อ่านโค้ด Python ไล่ลำดับการทำงาน และแก้ข้อผิดพลาดได้</li>
+            <li>เขียนขั้นตอนวิธีโดยใช้เงื่อนไข การวนซ้ำ และฟังก์ชันได้</li>
+            <li>จัดการข้อมูลด้วยคอลเลกชัน สตริง และไฟล์ได้</li>
           </ul>
         </section>
       </div>
       <div className="spaced">
-        <small>LEARNING PATH</small>
-        <h2>Course modules</h2>
-        <p>Proposed practice modules for independent study.</p>
+        <small>เส้นทางการเรียน</small>
+        <h2>บทเรียนในวิชานี้</h2>
+        <p>บทเรียนที่จัดขึ้นสำหรับฝึกด้วยตนเอง</p>
       </div>
       <div className="list">
         {modules.map((m) => {
@@ -72,12 +69,12 @@ export function CoursePage() {
                   <strong>{m.title}</strong>
                   <p>{m.summary}</p>
                   <div className="metadata">
-                    {items[0].difficulty} · {n}/{items.length} exercises ·{' '}
+                    {items[0].difficulty} · {n}/{items.length} ข้อ ·{' '}
                     {n === items.length
-                      ? 'Completed'
+                      ? 'เรียนจบแล้ว'
                       : n
-                        ? 'In progress'
-                        : 'Ready to start'}
+                        ? 'กำลังเรียน'
+                        : 'พร้อมเริ่มเรียน'}
                   </div>
                 </div>
               </div>
@@ -95,16 +92,16 @@ export function ModulePage({ id }: { id: number }) {
   return (
     <div className="container content">
       <Link className="crumb" href={coursePath}>
-        ← Fundamentals of Programming
+        ← พื้นฐานการเขียนโปรแกรม
       </Link>
       <Heading
-        kicker={'ITDS120 · Module ' + String(id).padStart(2, '0')}
+        kicker={'ITDS120 · บทที่ ' + String(id).padStart(2, '0')}
         title={m.title}
       >
         {m.summary}
       </Heading>
       <section className="panel level">
-        <small>LEARNING OBJECTIVES</small>
+        <small>เป้าหมายการเรียนรู้</small>
         <ul>
           {exercises
             .filter((e) => e.module === id)
@@ -113,7 +110,7 @@ export function ModulePage({ id }: { id: number }) {
             ))}
         </ul>
       </section>
-      <h2 className="spaced">Practice exercises</h2>
+      <h2 className="spaced">แบบฝึกหัด</h2>
       <div className="list">
         {exercises
           .filter((e) => e.module === id)
@@ -125,7 +122,7 @@ export function ModulePage({ id }: { id: number }) {
                   <small>{typeLabel[e.type]}</small>
                   <strong>{e.title}</strong>
                   <p>
-                    {e.difficulty} · {done ? 'Completed' : 'Ready to practice'}
+                    {e.difficulty} · {done ? 'เรียนจบแล้ว' : 'พร้อมฝึก'}
                   </p>
                 </div>
                 <NeoBadge color={done ? 'mint' : 'yellow'}>

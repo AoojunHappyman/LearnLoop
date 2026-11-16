@@ -18,27 +18,27 @@ export function evaluate(e: Exercise, answer: string): Result {
     : answer.trim() === e.answer
   if (passed)
     return {
-      status: 'Accepted',
+      status: 'คำตอบถูกต้อง',
       passed,
       actual: e.tests[0].output,
       feedback: code
-        ? 'Your code matches the reference pattern for this simulated case.'
-        : 'Your answer matches the expected response.',
+        ? 'โค้ดของคุณตรงกับรูปแบบเฉลยสำหรับกรณีทดสอบจำลองนี้'
+        : 'คำตอบของคุณตรงกับเฉลย',
     }
   const patterns: [RegExp, string][] = [
-    [/while True:/, 'Time Limit Exceeded'],
-    [/raise (ValueError|Exception)|\/ 0\b/, 'Runtime Error'],
-    [/___|print\([^)]*$/, 'Syntax Error'],
+    [/while True:/, 'ใช้เวลาเกินกำหนด'],
+    [/raise (ValueError|Exception)|\/ 0\b/, 'เกิดข้อผิดพลาดขณะทำงาน'],
+    [/___|print\([^)]*$/, 'ไวยากรณ์ไม่ถูกต้อง'],
   ]
   const status = code
-    ? patterns.find(([r]) => r.test(answer))?.[1] || 'Wrong Answer'
-    : 'Wrong Answer'
+    ? patterns.find(([r]) => r.test(answer))?.[1] || 'คำตอบยังไม่ถูกต้อง'
+    : 'คำตอบยังไม่ถูกต้อง'
   return {
     status,
     passed: false,
-    actual: code ? 'No simulated output' : answer || '(empty)',
+    actual: code ? 'ไม่มีผลลัพธ์จากการจำลอง' : answer || '(ว่าง)',
     feedback: code
-      ? 'The demo checks a reference pattern. Compare your code with the hint or reference solution. Equivalent Python programs may differ.'
+      ? 'ลองเทียบโค้ดกับคำใบ้หรือตัวอย่างเฉลย ตัวจำลองตรวจตามรูปแบบเฉลย โค้ดที่เขียนต่างกันแต่อาจให้ผลเท่ากันจึงอาจไม่ผ่าน'
       : e.hint,
   }
 }

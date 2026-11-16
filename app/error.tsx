@@ -2,9 +2,9 @@
 export default function ErrorPage({ reset }: { reset: () => void }) {
   return (
     <div className="container content">
-      <h1>Unable to load this page</h1>
+      <h1>โหลดหน้านี้ไม่สำเร็จ</h1>
       <button className="btn yellow" onClick={reset}>
-        Try again
+        ลองอีกครั้ง
       </button>
     </div>
   )

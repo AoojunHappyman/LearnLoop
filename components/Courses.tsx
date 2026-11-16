@@ -38,7 +38,7 @@ export function CourseCard({ course }: { course: Course }) {
       </div>
       <div className="coursebody">
         <NeoBadge color={course.available ? 'mint' : 'cream'}>
-          {course.available ? '● Available' : '◷ Coming soon'}
+          {course.available ? '● เปิดให้เรียน' : '◷ เร็ว ๆ นี้'}
         </NeoBadge>
         <h3>{course.title}</h3>
         <p>{course.description}</p>
@@ -46,14 +46,14 @@ export function CourseCard({ course }: { course: Course }) {
           <>
             <div className="metadata">
               <span>
-                <Layers /> {modules.length} modules
+                <Layers /> {modules.length} บท
               </span>
               <span>
-                <Code2 /> {exercises.length} exercises
+                <Code2 /> {exercises.length} ข้อ
               </span>
             </div>
             <div className="metadata">
-              Python · Beginner <ArrowUpRight />
+              Python · ระดับต้น <ArrowUpRight />
             </div>
             {data.submissions.length > 0 && (
               <NeoProgressBar
@@ -64,7 +64,7 @@ export function CourseCard({ course }: { course: Course }) {
             )}
           </>
         ) : (
-          <div className="metadata">Planned course · Details to follow</div>
+          <div className="metadata">อยู่ระหว่างเตรียมเนื้อหา</div>
         )}
       </div>
     </>
@@ -79,35 +79,35 @@ export function CourseCard({ course }: { course: Course }) {
 }
 export function Catalog() {
   const [query, q] = useState(''),
-    [category, c] = useState('All subjects'),
-    [availability, a] = useState('All statuses')
+    [category, c] = useState('ทุกหมวดวิชา'),
+    [availability, a] = useState('ทุกสถานะ')
   const list = courses.filter(
     (x) =>
       (' ' + x.title + ' ' + x.id + ' ' + x.category)
         .toLowerCase()
         .includes(query.trim().toLowerCase()) &&
-      (category === 'All subjects' || x.category === category) &&
-      (availability === 'All statuses' ||
-        x.available === (availability === 'Available')),
+      (category === 'ทุกหมวดวิชา' || x.category === category) &&
+      (availability === 'ทุกสถานะ' ||
+        x.available === (availability === 'เปิดให้เรียน')),
   )
   return (
     <div className="container content">
-      <Heading kicker="Course catalog" title="Explore courses">
-        Choose a subject and find your next challenge.
+      <Heading kicker="คลังรายวิชา" title="สำรวจรายวิชา">
+        เลือกวิชาที่สนใจ แล้วลองทำโจทย์แรกของคุณ
       </Heading>
       <div className="filters">
         <label className="search">
           <Search size={18} />
           <input
-            aria-label="Search courses"
-            placeholder="Search courses or codes"
+            aria-label="ค้นหารายวิชา"
+            placeholder="ค้นหาด้วยชื่อหรือรหัสวิชา"
             value={query}
             onChange={(e) => q(e.target.value)}
           />
         </label>
         {[
-          [category, c, ['All subjects', ...courses.map((x) => x.category)]],
-          [availability, a, ['All statuses', 'Available', 'Coming soon']],
+          [category, c, ['ทุกหมวดวิชา', ...courses.map((x) => x.category)]],
+          [availability, a, ['ทุกสถานะ', 'เปิดให้เรียน', 'เร็ว ๆ นี้']],
         ].map((entry, i) => {
           const [v, set, items] = entry as [
             string,
@@ -117,7 +117,7 @@ export function Catalog() {
           return (
             <select
               key={i}
-              aria-label={i ? 'Availability' : 'Category'}
+              aria-label={i ? 'สถานะรายวิชา' : 'หมวดวิชา'}
               value={v}
               onChange={(e) => set(e.target.value)}
             >
@@ -129,18 +129,14 @@ export function Catalog() {
         })}
       </div>
       <p className="mono" role="status">
-        {list.length} courses
+        {list.length} รายวิชา
       </p>
       <div className="grid3">
         {list.map((course) => (
           <CourseCard course={course} key={course.id} />
         ))}
       </div>
-      {!list.length && (
-        <p>
-          No courses match your filters. Try another subject or search term.
-        </p>
-      )}
+      {!list.length && <p>ไม่พบรายวิชาที่ตรงกัน ลองเปลี่ยนคำค้นหรือตัวกรอง</p>}
     </div>
   )
 }

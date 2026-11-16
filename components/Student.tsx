@@ -29,21 +29,26 @@ import {
   practicePath,
 } from '@/lib/content'
 import { Heading, NeoButton, NeoCard, NeoBadge, NeoProgressBar } from './ui'
-const sections = ['dashboard', 'profile', 'achievements', 'leaderboard']
+const sections = {
+  dashboard: 'ภาพรวมการเรียน',
+  profile: 'โปรไฟล์',
+  achievements: 'เหรียญรางวัล',
+  leaderboard: 'อันดับผู้เรียน',
+}
 function Sidebar() {
   const path = usePathname().replace(/\/$/, '')
   return (
-    <nav className="subnav" aria-label="Student pages">
-      {sections.map((s) => (
+    <nav className="subnav" aria-label="เมนูผู้เรียน">
+      {Object.entries(sections).map(([s, label]) => (
         <Link
           key={s}
           href={'/' + s}
           aria-current={path === '/' + s ? 'page' : undefined}
         >
-          {s[0].toUpperCase() + s.slice(1)}
+          {label}
         </Link>
       ))}
-      <Link href="/exams">Practice exams</Link>
+      <Link href="/exams">ข้อสอบฝึกทำ</Link>
     </nav>
   )
 }
@@ -64,7 +69,7 @@ function analytics(subs: Submission[]) {
     const d = new Date(now)
     d.setDate(d.getDate() - 6 + i)
     return {
-      day: d.toLocaleDateString('en', { weekday: 'short' }),
+      day: d.toLocaleDateString('th', { weekday: 'short' }),
       solved: subs.filter((s) => dayKey(new Date(s.date)) === dayKey(d)).length,
     }
   })
@@ -89,8 +94,8 @@ function StatCard({ label, value }: { label: string; value: number | string }) {
 function ActivityChart({ week }: { week: { day: string; solved: number }[] }) {
   return (
     <section className="panel">
-      <h3>Weekly activity</h3>
-      <p>Exercises completed over the last seven days.</p>
+      <h3>กิจกรรมประจำสัปดาห์</h3>
+      <p>จำนวนโจทย์ที่ทำสำเร็จในแต่ละวัน ย้อนหลัง 7 วัน</p>
       <div style={{ height: 210, marginTop: 16 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={week}>
@@ -103,6 +108,7 @@ function ActivityChart({ week }: { week: { day: string; solved: number }[] }) {
             <Tooltip />
             <Bar
               dataKey="solved"
+              name="โจทย์ที่ทำสำเร็จ"
               fill="#b8a4ff"
               stroke="#171717"
               strokeWidth={2}
@@ -124,37 +130,37 @@ export function Student({ section }: { section: string }) {
     pct = Math.round((done.length * 100) / exercises.length),
     next = exercises.find((e) => !done.includes(e.id)) || exercises[0],
     level = 1 + Math.floor(xp / 200),
-    name = data.user?.name || 'Guest learner'
+    name = data.user?.name || 'ผู้เรียนรับเชิญ'
   const awards = [
     {
-      title: 'Hello World',
-      description: 'Complete your first exercise.',
+      title: 'ก้าวแรกกับ Hello World',
+      description: 'ทำโจทย์ข้อแรกสำเร็จ',
       earned: done.length > 0,
       Icon: Terminal,
     },
     {
-      title: 'Python Rookie',
-      description: 'Solve 20 Python problems.',
+      title: 'มือใหม่ Python',
+      description: 'ทำโจทย์ Python สำเร็จ 20 ข้อ',
       earned: done.length >= 20,
       Icon: Star,
     },
     {
-      title: 'Bug Hunter',
-      description: 'Complete 10 debugging exercises.',
+      title: 'นักล่าบั๊ก',
+      description: 'แก้โจทย์หาข้อผิดพลาดสำเร็จ 10 ข้อ',
       earned:
         exercises.filter((e) => e.type === 'DEBUGGING' && done.includes(e.id))
           .length >= 10,
       Icon: Bug,
     },
     {
-      title: 'On Fire',
-      description: 'Maintain a seven-day streak.',
+      title: 'เรียนต่อเนื่อง',
+      description: 'ทำโจทย์ต่อเนื่องครบ 7 วัน',
       earned: earnedWeek,
       Icon: Flame,
     },
     {
-      title: 'Python Master',
-      description: 'Complete all ITDS120 exercises.',
+      title: 'เซียน Python',
+      description: 'ทำโจทย์ ITDS120 ครบทุกข้อ',
       earned: done.length === exercises.length,
       Icon: Trophy,
     },
@@ -176,13 +182,10 @@ export function Student({ section }: { section: string }) {
     .slice(0, 3)
   const stats = (
     <div className="grid4">
-      <StatCard label="Total XP" value={xp} />
-      <StatCard label="Problems solved" value={done.length} />
-      <StatCard label="Current streak" value={streak + ' days'} />
-      <StatCard
-        label="Courses in progress"
-        value={done.length && pct < 100 ? 1 : 0}
-      />
+      <StatCard label="XP ทั้งหมด" value={xp} />
+      <StatCard label="โจทย์ที่ทำสำเร็จ" value={done.length} />
+      <StatCard label="เรียนต่อเนื่อง" value={streak + ' วัน'} />
+      <StatCard label="วิชาที่กำลังเรียน" value={done.length && pct < 100 ? 1 : 0} />
     </div>
   )
   const achievements = (
@@ -194,7 +197,7 @@ export function Student({ section }: { section: string }) {
           <p>{description}</p>
           <NeoBadge color={earned ? 'mint' : 'cream'}>
             {earned ? <Check size={13} /> : <LockKeyhole size={13} />}{' '}
-            {earned ? 'Earned' : 'Locked'}
+            {earned ? 'ได้รับแล้ว' : 'ยังไม่ปลดล็อก'}
           </NeoBadge>
         </NeoCard>
       ))}
@@ -205,23 +208,20 @@ export function Student({ section }: { section: string }) {
       <Sidebar />
       {section === 'dashboard' ? (
         <>
-          <Heading
-            kicker="STUDENT DASHBOARD"
-            title="Welcome back! Ready to level up?"
-          >
-            {name} · Your learning activity in this browser.
+          <Heading kicker="ภาพรวมการเรียน" title="ยินดีต้อนรับกลับมา วันนี้พร้อมฝึกไหม?">
+            {name} · กิจกรรมการเรียนของคุณในเบราว์เซอร์นี้
           </Heading>
           {stats}
           <div className="grid2 spaced">
             <section className="panel level">
-              <small>CONTINUE LEARNING</small>
-              <h3>Fundamentals of Programming</h3>
-              <p>ITDS120 · {pct}% complete</p>
+              <small>เรียนต่อจากครั้งก่อน</small>
+              <h3>พื้นฐานการเขียนโปรแกรม</h3>
+              <p>ITDS120 · {pct}%</p>
               <NeoProgressBar value={pct} />
-              <p>Next up · {next.title}</p>
+              <p>โจทย์ถัดไป · {next.title}</p>
               <div className="actions">
                 <NeoButton href={practicePath(next.id)}>
-                  Resume <ArrowRight size={16} />
+                  ฝึกต่อ <ArrowRight size={16} />
                 </NeoButton>
               </div>
             </section>
@@ -229,7 +229,7 @@ export function Student({ section }: { section: string }) {
           </div>
           <div className="grid2">
             <section className="panel">
-              <h3>Topic mastery</h3>
+              <h3>ความคืบหน้ารายหัวข้อ</h3>
               {mastered.map(({ m, value }) => (
                 <div key={m.id}>
                   <div className="split">
@@ -241,8 +241,8 @@ export function Student({ section }: { section: string }) {
               ))}
             </section>
             <section className="panel">
-              <h3>Recommended practice</h3>
-              <p>Exercises from your least completed topics.</p>
+              <h3>โจทย์แนะนำ</h3>
+              <p>ฝึกเพิ่มในหัวข้อที่คุณยังทำโจทย์ได้น้อย</p>
               {recommended.map((e) => (
                 <Link
                   key={e.id}
@@ -254,43 +254,44 @@ export function Student({ section }: { section: string }) {
                 </Link>
               ))}
               {!recommended.length && (
-                <NeoButton href="/exams">Try a practice exam</NeoButton>
+                <NeoButton href="/exams">ลองทำข้อสอบ</NeoButton>
               )}
             </section>
           </div>
         </>
       ) : section === 'profile' ? (
         <>
-          <Heading kicker="STUDENT PROFILE" title={name} />
+          <Heading kicker="โปรไฟล์ผู้เรียน" title={name} />
           <section className="panel level">
             <div className="row">
               <span className="num">{name.slice(0, 2).toUpperCase()}</span>
-              <strong>Level {level}</strong>
+              <strong>ระดับ {level}</strong>
               <NeoBadge color="yellow">{xp} XP</NeoBadge>
             </div>
             <NeoProgressBar value={(xp % 200) / 2} />
             <p>
-              {200 - (xp % 200)} XP to level {level + 1}
+              {200 - (xp % 200)} XP เพื่อขึ้นระดับ {level + 1}
             </p>
           </section>
           <div className="spaced">{stats}</div>
           <div className="grid2">
             <div className="panel">
-              <h3>Course completion</h3>
+              <h3>ความคืบหน้ารายวิชา</h3>
               <Link href={coursePath} className="under">
                 ITDS120 · {pct}%
               </Link>
               <NeoProgressBar value={pct} />
-              <h3>Earned achievements</h3>
+              <h3>เหรียญที่ได้รับ</h3>
               <p>
                 {awards
                   .filter((a) => a.earned)
                   .map((a) => a.title)
-                  .join(' · ') || 'Complete an exercise to earn Hello World.'}
+                  .join(' · ') ||
+                  'ทำโจทย์ให้สำเร็จหนึ่งข้อเพื่อรับเหรียญก้าวแรกกับ Hello World'}
               </p>
             </div>
             <div className="panel">
-              <h3>Recent activity</h3>
+              <h3>กิจกรรมล่าสุด</h3>
               {data.submissions.length ? (
                 [...data.submissions]
                   .reverse()
@@ -302,32 +303,32 @@ export function Student({ section }: { section: string }) {
                     </p>
                   ))
               ) : (
-                <p>Your submissions will appear here.</p>
+                <p>เมื่อส่งคำตอบสำเร็จ โจทย์ที่ทำจะปรากฏที่นี่</p>
               )}
             </div>
           </div>
           <div className="actions">
             {data.user ? (
               <NeoButton tone="white" onClick={logout}>
-                Log out of demo
+                ออกจากระบบทดลอง
               </NeoButton>
             ) : (
-              <NeoButton href="/login">Demo login</NeoButton>
+              <NeoButton href="/login">เข้าสู่ระบบทดลอง</NeoButton>
             )}
           </div>
         </>
       ) : section === 'achievements' ? (
         <>
-          <Heading kicker="YOUR COLLECTION" title="Achievements">
-            {awards.filter((a) => a.earned).length} of {awards.length} earned.
-            Each achievement marks a learning milestone.
+          <Heading kicker="เหรียญสะสมของคุณ" title="เหรียญรางวัล">
+            {awards.filter((a) => a.earned).length} จาก {awards.length}{' '}
+            เหรียญที่ปลดล็อกแล้ว
           </Heading>
           {achievements}
         </>
       ) : (
         <>
-          <Heading kicker="COMMUNITY · DEMO RANKINGS" title="Leaderboard">
-            See how your local XP compares with sample learner profiles.
+          <Heading kicker="ชุมชนผู้เรียน · อันดับตัวอย่าง" title="อันดับผู้เรียน">
+            เปรียบเทียบ XP ที่คุณสะสมในเบราว์เซอร์นี้กับคะแนนของผู้เรียนตัวอย่าง
           </Heading>
           <section className="panel">
             {[
@@ -335,7 +336,7 @@ export function Student({ section }: { section: string }) {
               { n: 'Arun P.', xp: 515 },
               { n: 'Nina S.', xp: 390 },
               { n: 'Theo L.', xp: 240 },
-              { n: name + ' (you)', xp },
+              { n: name + ' (คุณ)', xp },
             ]
               .sort((a, b) => b.xp - a.xp)
               .map((s, i) => (

@@ -28,11 +28,14 @@ const Editor = dynamic(
       m.loader.config({ paths: { vs: '/monaco/vs' } })
       return m.default
     }),
-  { ssr: false, loading: () => <div className="loading">Loading editor…</div> },
+  {
+    ssr: false,
+    loading: () => <div className="loading">กำลังโหลดตัวแก้ไขโค้ด…</div>,
+  },
 )
 export function Practice({ exercise: e }: { exercise: Exercise }) {
   const [answer, setAnswer] = useState(e.starter),
-    [tab, setTab] = useState('Test Cases'),
+    [tab, setTab] = useState('กรณีทดสอบ'),
     [run, R] = useState<Result | null>(null),
     [submitted, S] = useState<Result | null>(null),
     [notice, N] = useState(''),
@@ -54,7 +57,7 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
   function check(submit: boolean) {
     const result = evaluate(e, answer)
     R(result)
-    setTab(submit ? 'Submission Results' : 'Test Cases')
+    setTab(submit ? 'ผลการส่งคำตอบ' : 'กรณีทดสอบ')
     if (submit) {
       S(result)
       if (result.passed) {
@@ -75,8 +78,8 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
           <h1
             style={{
               fontSize: 38,
-              lineHeight: 1.1,
-              letterSpacing: '-.055em',
+              lineHeight: 1.4,
+              letterSpacing: 'normal',
               marginBottom: 14,
             }}
           >
@@ -86,41 +89,38 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
             <NeoBadge color="purple">{e.difficulty}</NeoBadge>
             <NeoBadge color="yellow">+{e.xp} XP</NeoBadge>
           </div>
-          <h4>Problem</h4>
+          <h4>โจทย์</h4>
           <p>{e.prompt}</p>
-          <h4>Input format</h4>
+          <h4>รูปแบบข้อมูลเข้า</h4>
           <p>
             {e.tests[0].input === 'None'
-              ? 'No input required.'
-              : 'Use the input shown in the example.'}
+              ? 'ไม่ต้องป้อนข้อมูล'
+              : 'ใช้ข้อมูลตามรูปแบบที่แสดงในตัวอย่าง'}
           </p>
-          <h4>Output format</h4>
+          <h4>รูปแบบผลลัพธ์</h4>
           <p>
             {code
-              ? 'Produce the requested result with exact capitalization.'
-              : 'Enter or select one answer.'}
+              ? 'แสดงผลตามโจทย์ โดยใช้ตัวพิมพ์เล็กและตัวพิมพ์ใหญ่ให้ตรง'
+              : 'พิมพ์หรือเลือกคำตอบหนึ่งข้อ'}
           </p>
-          <h4>Constraints</h4>
-          <p>
-            Use Python 3 conventions. Preserve meaningful spaces and line
-            breaks.
-          </p>
-          <h4>Example</h4>
+          <h4>ข้อกำหนด</h4>
+          <p>ใช้รูปแบบของ Python 3 เว้นวรรคและขึ้นบรรทัดใหม่ให้ตรงตามโจทย์</p>
+          <h4>ตัวอย่าง</h4>
           <pre>
-            {'Input\n' +
-              e.tests[0].input +
+            {'ข้อมูลเข้า\n' +
+              (e.tests[0].input === 'None' ? 'ไม่มี' : e.tests[0].input) +
               '\n\n' +
               (code
-                ? 'Expected output\n' + e.tests[0].output
-                : 'Task\n' + e.prompt)}
+                ? 'ผลลัพธ์ที่คาดหวัง\n' + e.tests[0].output
+                : 'สิ่งที่ต้องทำ\n' + e.prompt)}
           </pre>
           <details>
-            <summary>Show hint</summary>
+            <summary>ดูคำใบ้</summary>
             <p>{e.hint}</p>
           </details>
           {code && (
             <details>
-              <summary>Reference solution</summary>
+              <summary>ดูตัวอย่างเฉลย</summary>
               <pre>{e.answer}</pre>
             </details>
           )}
@@ -130,7 +130,7 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
                 className="textlink"
                 href={practicePath(exercises[index - 1].id)}
               >
-                <ChevronLeft size={15} /> Previous
+                <ChevronLeft size={15} /> ก่อนหน้า
               </Link>
             )}
             {index < exercises.length - 1 && (
@@ -138,7 +138,7 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
                 className="textlink"
                 href={practicePath(exercises[index + 1].id)}
               >
-                Next exercise <ChevronRight size={15} />
+                โจทย์ถัดไป <ChevronRight size={15} />
               </Link>
             )}
           </div>
@@ -149,25 +149,25 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
               <div className="toolbar">
                 <span>main.py · Python 3</span>
                 <button
-                  aria-label="Copy code"
-                  title="Copy code"
+                  aria-label="คัดลอกโค้ด"
+                  title="คัดลอกโค้ด"
                   onClick={async () => {
                     try {
                       await navigator.clipboard.writeText(answer)
-                      N('Code copied.')
+                      N('คัดลอกโค้ดแล้ว')
                     } catch {
-                      N('Select the code and use Ctrl+C to copy.')
+                      N('เลือกโค้ดแล้วกด Ctrl+C เพื่อคัดลอก')
                     }
                   }}
                 >
                   <Copy size={17} />
                 </button>
                 <button
-                  aria-label="Reset starter code"
-                  title="Reset starter code"
+                  aria-label="คืนค่าโค้ดเริ่มต้น"
+                  title="คืนค่าโค้ดเริ่มต้น"
                   onClick={() => {
                     edit(e.starter)
-                    N('Starter code restored.')
+                    N('คืนค่าโค้ดเริ่มต้นแล้ว')
                   }}
                 >
                   <RotateCcw size={17} />
@@ -195,14 +195,14 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
                   scrollBeyondLastLine: false,
                   tabSize: 4,
                   accessibilitySupport: 'on',
-                  ariaLabel: 'Python solution editor',
+                  ariaLabel: 'ตัวแก้ไขโค้ด Python',
                 }}
               />
             </div>
           ) : (
             <section className="panel">
               <small>{typeLabel[e.type]}</small>
-              <h3>Your answer</h3>
+              <h3>คำตอบของคุณ</h3>
               {e.starter && <pre>{e.starter}</pre>}
               {e.choices ? (
                 e.choices.map((c) => (
@@ -217,7 +217,7 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
                 ))
               ) : (
                 <textarea
-                  aria-label="Predicted output"
+                  aria-label="ผลลัพธ์ที่คาดว่าจะได้"
                   value={answer}
                   onChange={(ev) => edit(ev.target.value)}
                 />
@@ -228,20 +228,20 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
           <section className="panel spaced">
             <p className="notice">
               {code
-                ? 'Simulated Python runner · Checks a reference solution locally.'
-                : 'Practice feedback · Answers are checked locally.'}
+                ? 'ตัวจำลอง Python · เปรียบเทียบโค้ดกับเฉลยในเบราว์เซอร์ โดยไม่มีการรัน Python จริง'
+                : 'ระบบจะตรวจคำตอบในเบราว์เซอร์ของคุณ'}
             </p>
             <div className="actions practiceactions">
               <NeoButton tone="white" onClick={() => check(false)}>
                 <Play size={15} />
-                {code ? 'Run Code' : 'Check Answer'}
+                {code ? 'ทดสอบโค้ด' : 'ตรวจคำตอบ'}
               </NeoButton>
               <NeoButton onClick={() => check(true)}>
-                <Send size={15} /> Submit Solution
+                <Send size={15} /> ส่งคำตอบ
               </NeoButton>
             </div>
             <div className="tabbar">
-              {['Test Cases', 'Console', 'Submission Results'].map((t) => (
+              {['กรณีทดสอบ', 'คอนโซล', 'ผลการส่งคำตอบ'].map((t) => (
                 <button
                   key={t}
                   aria-pressed={tab === t}
@@ -252,30 +252,30 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
               ))}
             </div>
             <div aria-live="polite">
-              {tab === 'Console' ? (
+              {tab === 'คอนโซล' ? (
                 <pre>
                   {run
-                    ? 'Prototype evaluation\n' + run.status + '\n' + run.actual
-                    : 'Waiting for a run.'}
+                    ? 'ผลการตรวจแบบจำลอง\n' + run.status + '\n' + run.actual
+                    : 'ยังไม่ได้เริ่มทดสอบ'}
                 </pre>
-              ) : (tab === 'Test Cases' ? run : submitted) ? (
+              ) : (tab === 'กรณีทดสอบ' ? run : submitted) ? (
                 <TestCasePanel
-                  result={(tab === 'Test Cases' ? run : submitted)!}
+                  result={(tab === 'กรณีทดสอบ' ? run : submitted)!}
                   expected={e.tests[0].output}
                 />
               ) : (
                 <p className="mono">
-                  {tab === 'Test Cases'
-                    ? '1 sample case ready.'
-                    : 'Submit your answer to see a result.'}
+                  {tab === 'กรณีทดสอบ'
+                    ? 'พร้อมทดสอบ 1 กรณี'
+                    : 'ส่งคำตอบเพื่อดูผลการตรวจ'}
                 </p>
               )}
-              {xp && tab === 'Submission Results' && submitted?.passed && (
+              {xp && tab === 'ผลการส่งคำตอบ' && submitted?.passed && (
                 <motion.div
                   initial={reduce ? false : { y: 8, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                 >
-                  <NeoBadge color="yellow">+{e.xp} XP earned</NeoBadge>
+                  <NeoBadge color="yellow">ได้รับ +{e.xp} XP</NeoBadge>
                 </motion.div>
               )}
             </div>
@@ -296,9 +296,9 @@ function TestCasePanel({
     <div className={'feedback ' + (result.passed ? 'mint' : 'fail')}>
       <strong>
         {result.status} ·{' '}
-        {result.passed ? '1 passed, 0 failed' : '0 passed, 1 failed'}
+        {result.passed ? 'ผ่าน 1 กรณี ไม่ผ่าน 0 กรณี' : 'ผ่าน 0 กรณี ไม่ผ่าน 1 กรณี'}
       </strong>
-      <pre>{'Expected: ' + expected + '\nActual: ' + result.actual}</pre>
+      <pre>{'ผลที่คาดหวัง: ' + expected + '\nผลที่ได้: ' + result.actual}</pre>
       <p>{result.feedback}</p>
     </div>
   )

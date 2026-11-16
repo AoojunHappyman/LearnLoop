@@ -5,10 +5,10 @@ import { useState } from 'react'
 import { ArrowUpRight, Infinity as Loop, Menu, X } from 'lucide-react'
 import { useProgress } from '@/lib/progress'
 const links = [
-  ['Home', '/'],
-  ['Explore Courses', '/courses'],
-  ['Practice', '/practice/hello-loop'],
-  ['Leaderboard', '/leaderboard'],
+  ['หน้าแรก', '/'],
+  ['สำรวจรายวิชา', '/courses'],
+  ['ฝึกทำโจทย์', '/practice/hello-loop'],
+  ['อันดับผู้เรียน', '/leaderboard'],
 ]
 export function Logo() {
   return (
@@ -27,11 +27,11 @@ export function Navbar() {
   return (
     <header className="navshell">
       <a href="#main" className="skip">
-        Skip to content
+        ข้ามไปยังเนื้อหา
       </a>
       <div className="container navbar">
         <Logo />
-        <nav className={open ? 'open' : ''} aria-label="Primary">
+        <nav className={open ? 'open' : ''} aria-label="เมนูหลัก">
           {links.map(([n, h]) => (
             <Link
               key={h}
@@ -47,22 +47,23 @@ export function Navbar() {
             onClick={() => set(false)}
             href={data.user ? '/profile' : '/login'}
           >
-            {data.user ? 'Profile' : 'Login'}
+            {data.user ? 'โปรไฟล์' : 'เข้าสู่ระบบ'}
           </Link>
         </nav>
         <div className="navright">
           <Link className="login" href={data.user ? '/profile' : '/login'}>
-            {data.user ? 'Profile' : 'Login'}
+            {data.user ? 'โปรไฟล์' : 'เข้าสู่ระบบ'}
           </Link>
           <Link
             className="btn yellow mini"
             href={data.user ? '/dashboard' : '/register'}
           >
-            {data.user ? 'Dashboard' : 'Get Started'} <ArrowUpRight size={16} />
+            {data.user ? 'ภาพรวมการเรียน' : 'เริ่มใช้งาน'}{' '}
+            <ArrowUpRight size={16} />
           </Link>
           <button
             className="menu"
-            aria-label="Toggle navigation"
+            aria-label="เปิดหรือปิดเมนู"
             aria-expanded={open}
             onClick={() => set(!open)}
           >
@@ -81,11 +82,11 @@ export function Footer() {
           <Logo />
           <div>
             {[
-              ['Courses', '/courses'],
-              ['Dashboard', '/dashboard'],
-              ['Profile', '/profile'],
-              ['Achievements', '/achievements'],
-              ['Practice exams', '/exams'],
+              ['รายวิชา', '/courses'],
+              ['ภาพรวมการเรียน', '/dashboard'],
+              ['โปรไฟล์', '/profile'],
+              ['เหรียญรางวัล', '/achievements'],
+              ['ข้อสอบฝึกทำ', '/exams'],
             ].map(([n, h]) => (
               <Link key={n} href={h}>
                 {n}
@@ -93,9 +94,7 @@ export function Footer() {
             ))}
           </div>
         </div>
-        <p>
-          Learn. Practice. Level Up. · Independent student learning project.
-        </p>
+        <p>เรียนรู้ ฝึกฝน ก้าวไปอีกขั้น · โครงการเรียนรู้อิสระสำหรับนักศึกษา</p>
       </div>
     </footer>
   )

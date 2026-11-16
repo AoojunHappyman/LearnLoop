@@ -11,18 +11,18 @@ const path = '/exams/' + exam.id,
 export function Exams() {
   return (
     <div className="container content">
-      <Heading kicker="EXAM PREPARATION" title="Practice exams">
-        Rehearse under a time limit and review your performance by topic.
+      <Heading kicker="เตรียมสอบ" title="ข้อสอบฝึกทำ">
+        ฝึกทำข้อสอบแบบจับเวลา แล้วทบทวนผลแยกตามหัวข้อ
       </Heading>
       <div className="panel level">
         <ClipboardList size={36} />
-        <h3>ITDS120 Mock Exam</h3>
-        <NeoBadge color="yellow">Independent practice exam</NeoBadge>
-        <p className="spaced">20 questions · 60 minutes · Mixed difficulty</p>
+        <h3>ข้อสอบจำลอง ITDS120</h3>
+        <NeoBadge color="yellow">ข้อสอบฝึกทำสำหรับทบทวนด้วยตนเอง</NeoBadge>
+        <p className="spaced">20 ข้อ · 60 นาที · หลายระดับความยาก</p>
         <p>{exam.topics.join(' · ')}</p>
         <div className="actions">
           <NeoButton href={path}>
-            Open exam <ArrowRight size={16} />
+            เปิดข้อสอบ <ArrowRight size={16} />
           </NeoButton>
         </div>
       </div>
@@ -77,42 +77,44 @@ export function ExamRoom() {
   return (
     <div className="container content">
       <Link href="/exams" className="crumb">
-        ← Practice exams
+        ← ข้อสอบฝึกทำ
       </Link>
-      <Heading kicker="INDEPENDENT PRACTICE EXAM" title="ITDS120 Mock Exam" />
+      <Heading
+        kicker="ข้อสอบฝึกทำสำหรับทบทวนด้วยตนเอง"
+        title="ข้อสอบจำลอง ITDS120"
+      />
       {!ready ? (
-        <p>Loading attempt…</p>
+        <p>กำลังโหลดการทำข้อสอบ…</p>
       ) : !attempt ? (
         <div className="panel">
-          <h3>Before you begin</h3>
+          <h3>ก่อนเริ่มทำข้อสอบ</h3>
           <p>
-            Answer 20 multiple-choice questions in 60 minutes. You can revisit
-            any question before submitting. Your timer continues when you leave
-            this page. Unanswered questions receive zero points.
+            ตอบคำถามปรนัย 20 ข้อ ภายใน 60 นาที คุณย้อนกลับไปแก้คำตอบได้ก่อนส่ง
+            หากออกจากหน้านี้ เวลาจะยังเดินต่อ ข้อที่เว้นว่างจะได้ 0 คะแนน
           </p>
           <div className="actions">
             <NeoButton onClick={start}>
-              Start timed exam <Clock size={16} />
+              เริ่มทำข้อสอบจับเวลา <Clock size={16} />
             </NeoButton>
           </div>
         </div>
       ) : attempt.finished ? (
         <section className="panel">
-          <small>EXAM RESULTS</small>
+          <small>ผลสอบ</small>
           <h2>
             {
               questions.filter((q, i) => q.correct === attempt.answers[i])
                 .length
             }{' '}
-            / 20 correct
+            จาก 20 ข้อที่ตอบถูก
           </h2>
           <p>
             {20 -
               questions.filter((q, i) => q.correct === attempt.answers[i])
                 .length}{' '}
-            incorrect or unanswered
+            ข้อที่ผิดหรือไม่ได้ตอบ
           </p>
-          <h3>Topic performance</h3>
+          <h3>ผลรายหัวข้อ</h3>
           {exam.topics.map((t, i) => {
             const n = questions.filter(
               (q, j) => q.topic === t && attempt.answers[j] === q.correct,
@@ -123,46 +125,44 @@ export function ExamRoom() {
                   {t} · {n}/4
                 </strong>
                 <Link className="under" href={practicePath(topicPractice[i])}>
-                  Practice topic
+                  ฝึกหัวข้อนี้
                 </Link>
               </div>
             )
           })}
           <details className="spaced">
-            <summary>Review all answers</summary>
+            <summary>ทบทวนคำตอบทุกข้อ</summary>
             {questions.map((q, i) => (
               <div key={i} className="spaced">
                 <strong>
                   {i + 1}. {q.prompt}
                 </strong>
-                <p>
-                  Your answer · {q.choices[attempt.answers[i]] ?? 'Unanswered'}
-                </p>
-                <p>Correct answer · {q.choices[q.correct]}</p>
+                <p>คำตอบของคุณ · {q.choices[attempt.answers[i]] ?? 'ไม่ได้ตอบ'}</p>
+                <p>คำตอบที่ถูก · {q.choices[q.correct]}</p>
               </div>
             ))}
           </details>
-          <NeoButton onClick={start}>Try again</NeoButton>
+          <NeoButton onClick={start}>ลองอีกครั้ง</NeoButton>
         </section>
       ) : (
         <div className="workspace">
           <aside className="panel">
-            <small>TIME REMAINING</small>
+            <small>เวลาที่เหลือ</small>
             <div className="stat">
               {Math.floor(remaining / 60)}:
               {String(remaining % 60).padStart(2, '0')}
             </div>
-            <p>{count}/20 answered</p>
+            <p>ตอบแล้ว {count} จาก 20 ข้อ</p>
             <NeoProgressBar value={count * 5} />
-            <h3>Question navigation</h3>
+            <h3>เลือกข้อ</h3>
             <div className="questionnav">
               {questions.map((_, i) => (
                 <button
                   key={i}
                   aria-label={
-                    'Question ' +
+                    'ข้อที่ ' +
                     (i + 1) +
-                    (attempt.answers[i] >= 0 ? ', answered' : '')
+                    (attempt.answers[i] >= 0 ? ' ตอบแล้ว' : '')
                   }
                   aria-current={idx === i ? 'step' : undefined}
                   className={
@@ -178,7 +178,7 @@ export function ExamRoom() {
           </aside>
           <section className="panel">
             <small>
-              {q.topic} · QUESTION {idx + 1} OF 20
+              {q.topic} · ข้อที่ {idx + 1} จาก 20
             </small>
             <h3>{q.prompt}</h3>
             {q.choices.map((c, i) => (
@@ -202,30 +202,29 @@ export function ExamRoom() {
                 disabled={idx === 0}
                 onClick={() => I(idx - 1)}
               >
-                Previous
+                ก่อนหน้า
               </NeoButton>
               {idx < 19 && (
                 <NeoButton tone="white" onClick={() => I(idx + 1)}>
-                  Next
+                  ถัดไป
                 </NeoButton>
               )}
               <Dialog.Root open={open} onOpenChange={O}>
                 <Dialog.Trigger asChild>
-                  <button className="btn yellow">Submit exam</button>
+                  <button className="btn yellow">ส่งข้อสอบ</button>
                 </Dialog.Trigger>
                 <Dialog.Portal>
                   <Dialog.Overlay className="dialogoverlay" />
                   <Dialog.Content className="dialog panel">
                     <Dialog.Title asChild>
-                      <h2>Submit your exam?</h2>
+                      <h2>ยืนยันการส่งข้อสอบ?</h2>
                     </Dialog.Title>
                     <Dialog.Description>
-                      {count} of 20 questions answered. Submission ends this
-                      attempt.
+                      {count} จาก 20 ข้อ เมื่อส่งแล้วจะสิ้นสุดการทำข้อสอบครั้งนี้
                     </Dialog.Description>
                     <div className="actions">
                       <Dialog.Close className="btn white">
-                        Keep working
+                        กลับไปทำต่อ
                       </Dialog.Close>
                       <button
                         className="btn yellow"
@@ -234,7 +233,7 @@ export function ExamRoom() {
                           O(false)
                         }}
                       >
-                        Confirm submission
+                        ยืนยันการส่ง
                       </button>
                     </div>
                   </Dialog.Content>

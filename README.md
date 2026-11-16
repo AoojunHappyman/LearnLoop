@@ -1,19 +1,19 @@
 # LearnLoop
 
-LearnLoop is a responsive, browser-local university learning prototype built with the Next.js App Router, React, TypeScript, and Tailwind CSS. ITDS120 has 12 proposed modules and 24 exercises across five exercise types. The four additional subjects are marked as upcoming.
+แพลตฟอร์มเรียนและฝึกทำโจทย์ภาษาไทยสำหรับนักศึกษา สร้างด้วย Next.js App Router, React, TypeScript และ Tailwind CSS รายวิชา ITDS120 มี 12 บทและแบบฝึกหัด 24 ข้อ ครอบคลุมการเขียนโปรแกรม การแก้บั๊ก การทำนายผลลัพธ์ การเติมโค้ด และคำถามปรนัย อีกสี่รายวิชาอยู่ระหว่างเตรียมเนื้อหา
 
-## Run locally
+## เปิดใช้งานบนเครื่อง
 
-Use Node.js 22 or later and npm. From this directory run
+ใช้ Node.js 22 ขึ้นไปและ npm เปิดเทอร์มินัลในโฟลเดอร์โปรเจกต์แล้วรัน
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open **http://localhost:3000**. Dependencies include the editor runtime. The predev and prebuild scripts copy the required Monaco assets into the local public directory. Fonts and illustrations are served locally.
+เปิด [LearnLoop บนเครื่อง](http://localhost:3000) สคริปต์เตรียมไฟล์ของ Monaco Editor ให้อัตโนมัติ เว็บโหลดฟอนต์และภาพประกอบจากไฟล์ของโปรเจกต์
 
-## Production build
+## สร้างเว็บสำหรับเผยแพร่
 
 ```sh
 npm run build
@@ -21,32 +21,28 @@ npm run typecheck
 npm start
 ```
 
-The build produces a static export in `out/`. The start command prints the local preview URL. Deployment requires a static host that serves directory index files.
+ไฟล์เว็บอยู่ใน `out/` ใช้กับโฮสต์แบบสแตติกที่รองรับไฟล์ index ในแต่ละไดเรกทอรีได้ คำสั่งสุดท้ายจะแสดงที่อยู่สำหรับดูตัวอย่าง
 
-## Explore
+## ทดลองใช้งาน
 
-- Start at `/courses/itds120` and open a module or visit `/practice/hello-loop` directly.
-- In Monaco, Ctrl/Cmd + Enter runs a sample case. Ctrl/Cmd + Shift + Enter submits. The reference solution is available in the problem panel.
-- Each accepted exercise awards XP once. Dashboard activity, mastery, recommendations, and achievements use completed exercises.
-- Start the 20-question timed exam at `/exams`. Answers and the deadline survive reloads. Submission shows the score, answer review, and practice links by topic.
-- Login and registration create a local demo identity. Use sample credentials. The display name, progress, drafts, and exam attempt live in browser storage. Passwords are discarded. The browser shares learning progress across its demo display names.
+- เริ่มที่ `/courses/itds120` เพื่อเลือกบท หรือเปิด `/practice/hello-loop` เพื่อทำโจทย์แรก
+- ในตัวแก้ไขโค้ด กด Ctrl/Cmd + Enter เพื่อทดสอบ หรือ Ctrl/Cmd + Shift + Enter เพื่อส่งคำตอบ เปิดคำใบ้หรือเฉลยได้ในแผงโจทย์
+- ทำโจทย์สำเร็จเพื่อรับ XP หนึ่งครั้งต่อข้อ ดูความก้าวหน้า เหรียญรางวัล และโจทย์แนะนำได้ในหน้าภาพรวมการเรียน
+- ที่ `/exams` มีข้อสอบฝึกทำ 20 ข้อ เวลา 60 นาที ระบบจำคำตอบและเวลาสิ้นสุดแม้โหลดหน้าใหม่ หลังส่งข้อสอบจะดูผลและทบทวนทีละข้อได้
+- ใช้ข้อมูลสมมติเพื่อลองเข้าสู่ระบบหรือลงทะเบียน เว็บเก็บชื่อที่ใช้แสดง ความก้าวหน้า แบบร่างโค้ด และการทำข้อสอบไว้ในเบราว์เซอร์เดียวกัน และไม่เก็บรหัสผ่าน ชื่อทดลองหลายชื่อในเบราว์เซอร์เดียวกันใช้ประวัติการเรียนร่วมกัน
 
-## Implementation
+## โครงสร้าง
 
-| Directory           | Purpose                                                                                         |
-| ------------------- | ----------------------------------------------------------------------------------------------- |
-| `app/`              | Server-rendered route entries, static parameters, layout, fallbacks, and design tokens          |
-| `components/`       | Reusable Neo-Brutalist UI, course views, Monaco workspace, dashboard, exam, and account screens |
-| `lib/content.ts`    | Typed course, module, exercise, test case, and progress entities                                |
-| `lib/evaluation.ts` | Local reference-pattern and answer-key evaluation                                               |
-| `lib/progress.tsx`  | Browser persistence and one-time XP awards                                                      |
-| `lib/exam.ts`       | Independent practice exam content                                                               |
-| `public/`           | Self-hosted fonts, licenses, and hero artwork                                                   |
+| ตำแหน่ง | หน้าที่ |
+| --- | --- |
+| `app/` | เส้นทางของแต่ละหน้า โครงหน้าหลัก และสไตล์ของเว็บ |
+| `components/` | องค์ประกอบที่ใช้ร่วมกัน หน้ารายวิชา ตัวแก้ไขโค้ด ภาพรวมการเรียน ข้อสอบ และบัญชีทดลอง |
+| `lib/content.ts` | ชนิดข้อมูลและเนื้อหาของรายวิชา บทเรียน โจทย์ และกรณีทดสอบ |
+| `lib/evaluation.ts` | ตรวจคำตอบและเปรียบเทียบโค้ดกับรูปแบบเฉลย |
+| `lib/progress.tsx` | บันทึกความก้าวหน้าและให้ XP |
+| `lib/exam.ts` | คลังคำถามสำหรับข้อสอบฝึกทำ |
+| `public/` | ฟอนต์ ใบอนุญาต และภาพประกอบ |
 
-The Python simulator compares normalized source against a reference pattern and supplies a canned example output. Other valid Python solutions can receive a mismatch. Error outcomes illustrate runner states. No submitted code executes. A future execution service can replace the evaluator through its typed result contract.
+ตัวจำลอง Python เปรียบเทียบข้อความโค้ดกับรูปแบบเฉลยแล้วแสดงผลตัวอย่าง โดยไม่มีการประมวลผล Python จริง โค้ดที่ให้ผลเท่ากันแต่เขียนต่างจากเฉลยจึงอาจไม่ผ่าน อนาคตสามารถเชื่อมบริการประมวลผลภายนอกผ่านชนิดข้อมูลผลตรวจที่กำหนดไว้ได้
 
-The community rankings contain sample learners. Course material and the practice exam are independent learning resources. They represent proposed practice content.
-
-## Artwork
-
-The hero illustration in `public/hero.webp` was created using built-in ImageGen. The prompt called for a smiling lavender CRT on programming textbooks, with a matching keyboard, a dark terminal tile, code-brace sticker, and graph-paper background in a limited ink-and-pastel palette. Font licenses are in `public/fonts/`.
+อันดับผู้เรียนใช้ข้อมูลตัวอย่าง บทเรียนและข้อสอบจัดทำขึ้นเป็นสื่ออิสระสำหรับทบทวนด้วยตนเอง ภาพคอมพิวเตอร์สีม่วงบนกองหนังสือสร้างด้วย ImageGen และเก็บไว้ที่ `public/hero.webp` ใบอนุญาตฟอนต์อยู่ใน `public/fonts/` และในแพ็กเกจ Noto Sans Thai
