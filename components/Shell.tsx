@@ -94,6 +94,12 @@ export function Footer() {
           </div>
         </div>
         <p>เรียนรู้ ฝึกฝน ก้าวไปอีกขั้น · โครงการเรียนรู้อิสระสำหรับนักศึกษา</p>
+        <p lang="en">
+          Developed by{' '}
+          <a className="under" href="https://aoojunhappyman.github.io/My-Profile/">
+            Pattanachai Sawetbunchoed
+          </a>
+        </p>
       </div>
     </footer>
   )
