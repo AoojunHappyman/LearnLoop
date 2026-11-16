@@ -28,7 +28,7 @@ export default function Home() {
             <br />
             ของชาว <mark>DST</mark>
           </h1>
-          <p>ทบทวน ITDS120 ผ่านโจทย์เขียน Python 50 ข้อ ตั้งแต่จัดการไฟล์ไปจนถึงวิเคราะห์ข้อมูลด้วย NumPy และ Pandas</p>
+          <p>ทบทวนสิ่งที่เรียนในหลักสูตร DST ลองทำโจทย์ด้วยตัวเอง และติดตามความก้าวหน้าในแต่ละบท</p>
           <div className="actions">
             <NeoButton href="/courses/itds120">
               เริ่มฝึก ITDS120 <ArrowRight size={18} />
