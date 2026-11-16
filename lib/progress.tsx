@@ -6,7 +6,7 @@ import {
   useState,
   ReactNode,
 } from 'react'
-import { Exercise, UserProgress } from './content'
+import { Exercise, Submission, UserProgress } from './content'
 const initial: UserProgress = { user: null, submissions: [] }
 const Context = createContext({
   data: initial,
@@ -19,13 +19,23 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     [ready, r] = useState(false)
   useEffect(() => {
     try {
-      const x = JSON.parse(localStorage.getItem('learnloop:v1') || 'null')
+      const saved = localStorage.getItem('learnloop:advanced:v1')
+      const x = JSON.parse(
+        saved ?? localStorage.getItem('learnloop:v1') ?? 'null',
+      )
+      if (!saved && Array.isArray(x?.submissions)) {
+        x.submissions = x.submissions.map((s: Submission) => ({
+          ...s,
+          exerciseId: 'legacy:' + s.exerciseId,
+        }))
+      }
       if (x && Array.isArray(x.submissions)) set(x)
     } catch {}
     r(true)
   }, [])
   useEffect(() => {
-    if (ready) localStorage.setItem('learnloop:v1', JSON.stringify(data))
+    if (ready)
+      localStorage.setItem('learnloop:advanced:v1', JSON.stringify(data))
   }, [ready, data])
   return (
     <Context.Provider
