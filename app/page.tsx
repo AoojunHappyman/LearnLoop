@@ -21,17 +21,17 @@ export default function Home() {
       <section className="container hero">
         <div className="herocopy">
           <span className="eyebrow">
-            <i /> เรียนรู้ ฝึกฝน ก้าวไปอีกขั้น
+            <i /> วิทยาการและเทคโนโลยีดิจิทัล
           </span>
           <h1>
-            พักเลื่อนฟีด
+            พื้นที่ฝึก
             <br />
-            มาเริ่ม <mark>เรียนกัน</mark>
+            ของชาว <mark>DST</mark>
           </h1>
-          <p>รวมวิชาเรียน โจทย์ฝึก และความก้าวหน้าของคุณไว้ในที่เดียว</p>
+          <p>ทบทวน ITDS120 ผ่านโจทย์เขียน Python 50 ข้อ ตั้งแต่จัดการไฟล์ไปจนถึงวิเคราะห์ข้อมูลด้วย NumPy และ Pandas</p>
           <div className="actions">
             <NeoButton href="/courses/itds120">
-              เริ่มเรียน <ArrowRight size={18} />
+              เริ่มฝึก ITDS120 <ArrowRight size={18} />
             </NeoButton>
             <NeoButton href="/courses" tone="white">
               <BookOpen size={18} /> สำรวจรายวิชา
