@@ -25,6 +25,7 @@ import {
   exercises,
   modules,
   coursePath,
+  programmingCourse,
   modulePath,
   practicePath,
 } from '@/lib/content'
@@ -215,7 +216,7 @@ export function Student({ section }: { section: string }) {
           <div className="grid2 spaced">
             <section className="panel level">
               <small>เรียนต่อจากครั้งก่อน</small>
-              <h3>พื้นฐานการเขียนโปรแกรม</h3>
+              <h3>{programmingCourse.title}</h3>
               <p>ITDS120 · {pct}%</p>
               <NeoProgressBar value={pct} />
               <p>โจทย์ถัดไป · {next.title}</p>

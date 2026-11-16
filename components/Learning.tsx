@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight, ChevronRight, Check, BookOpen } from 'lucide-react'
 import {
   coursePath,
+  programmingCourse,
   modules,
   exercises,
   modulePath,
@@ -23,7 +24,7 @@ export function CoursePage() {
       </Link>
       <Heading
         kicker="ITDS120 · การเขียนโปรแกรมด้วย Python"
-        title="พื้นฐานการเขียนโปรแกรม"
+        title={programmingCourse.title}
       >
         ปูพื้นฐาน Python ผ่านบทเรียนสั้น ๆ ฝึกไล่การทำงานของโค้ด แล้วลงมือแก้โจทย์ด้วยตัวเอง
       </Heading>
@@ -92,7 +93,7 @@ export function ModulePage({ id }: { id: number }) {
   return (
     <div className="container content">
       <Link className="crumb" href={coursePath}>
-        ← พื้นฐานการเขียนโปรแกรม
+        ← {programmingCourse.title}
       </Link>
       <Heading
         kicker={'ITDS120 · บทที่ ' + String(id).padStart(2, '0')}

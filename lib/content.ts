@@ -72,35 +72,35 @@ export interface ExamAttempt {
 export const courses: Course[] = [
   {
     id: 'itds120',
-    title: 'พื้นฐานการเขียนโปรแกรม',
+    title: 'Fundamentals of Programming',
     category: 'การเขียนโปรแกรม',
     description: 'ปูพื้นฐาน Python ด้วยการลงมือทำโจทย์ทีละข้อ',
     available: true,
   },
   {
     id: 'databases',
-    title: 'ระบบฐานข้อมูล',
+    title: 'Database Systems',
     category: 'การจัดการข้อมูล',
     description: 'รู้จักฐานข้อมูลเชิงสัมพันธ์ ออกแบบโครงสร้างข้อมูล และเขียนคำสั่ง SQL',
     available: false,
   },
   {
     id: 'web',
-    title: 'เทคโนโลยีเว็บ',
+    title: 'Web Technologies',
     category: 'การพัฒนาเว็บ',
     description: 'สร้างหน้าเว็บที่โต้ตอบได้ด้วย HTML, CSS และ JavaScript',
     available: false,
   },
   {
     id: 'structures',
-    title: 'โครงสร้างข้อมูล',
+    title: 'Data Structures',
     category: 'วิทยาการคอมพิวเตอร์',
     description: 'ฝึกจัดเก็บข้อมูลด้วยต้นไม้ สแตก คิว และกราฟ',
     available: false,
   },
   {
     id: 'networking',
-    title: 'เครือข่ายคอมพิวเตอร์',
+    title: 'Networking',
     category: 'โครงสร้างพื้นฐาน',
     description: 'เรียนรู้วิธีที่อุปกรณ์รับส่งแพ็กเก็ตผ่านเครือข่าย',
     available: false,
@@ -466,6 +466,7 @@ export const typeLabel: Record<ExerciseType, string> = {
   SQL: 'SQL',
   WEB: 'เว็บ',
 }
+export const programmingCourse = courses.find(course => course.id === 'itds120')!
 export const coursePath = '/courses/itds120'
 export const modulePath = (id: number) => coursePath + '/modules/' + id
 export const practicePath = (id: string) => '/practice/' + id
