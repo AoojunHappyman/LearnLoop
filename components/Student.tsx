@@ -1,8 +1,9 @@
 'use client'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { examCatalog } from '@/lib/exam'
-import { readBestScore } from '@/lib/exam-results'
+import { useState } from 'react'
+import { readGuest } from '@/lib/learning-records'
+import { allExams, examCatalog } from '@/lib/exam'
+import { attemptKey } from '@/lib/exam-results'
 import { usePathname } from 'next/navigation'
 import {
   BarChart,
@@ -132,16 +133,11 @@ function ActivityChart({ week }: { week: { day: string; solved: number }[] }) {
   )
 }
 export function Student({ section }: { section: keyof typeof sections }) {
-  const [bestScores, setBestScores] = useState<Record<string, number>>({})
-  useEffect(() => {
-    const refresh = () => setBestScores(Object.fromEntries(
-      examCatalog.map((exam) => [exam.id, readBestScore(exam)]),
-    ))
-    refresh()
-    window.addEventListener('storage', refresh)
-    return () => window.removeEventListener('storage', refresh)
-  }, [])
-  const { data, logout } = useProgress(),
+  const [choices, setChoices] = useState<string[]>([])
+  const [selected, setSelected] = useState<string[]>([])
+  const [importing, setImporting] = useState(false)
+  const [importMessage, setImportMessage] = useState('')
+  const { data, logout, importGuest, ready, records } = useProgress(),
     done = currentSubmissions(data.submissions).map((x) => x.exerciseId),
     { xp, week, streak, earnedWeek } = analytics(data.submissions),
     pct = Math.round((done.length * 100) / exercises.length),
@@ -203,7 +199,9 @@ export function Student({ section }: { section: keyof typeof sections }) {
     ...examCatalog.map((exam) => ({
       title: 'พร้อมสอบ ' + exam.courseId.toUpperCase(),
       description: 'ตอบถูกอย่างน้อย 80% ในข้อสอบเตรียมไฟนอลหนึ่งครั้ง',
-      count: bestScores[exam.id] || 0,
+      count: Math.max(0, ...Object.entries(records)
+        .filter(([key]) => key.startsWith(attemptKey(exam.id) + ':score:'))
+        .map(([, score]) => Number(score) || 0)),
       target: Math.ceil(exam.questions.length * 0.8),
       unit: 'ข้อ',
       Icon: Trophy,
@@ -353,6 +351,36 @@ export function Student({ section }: { section: keyof typeof sections }) {
               )}
             </div>
           </div>
+          {data.user && <section className="panel spaced">
+            <h3>นำเข้าผลงานจากเครื่องนี้</h3>
+            <p>หากโจทย์ที่ผ่าน แบบร่าง และผลสอบของผู้เรียนรับเชิญบนเครื่องนี้เป็นของคุณ ให้เลือกรายการของคุณก่อนนำเข้า หากเป็นเครื่องที่ใช้ร่วมกัน คุณข้ามขั้นตอนนี้ได้</p>
+            <NeoButton tone="white" disabled={!ready || importing} onClick={() => {
+              const keys = Object.keys(readGuest()).filter(key => !(key in records))
+              setChoices(keys)
+              setSelected([])
+              setImportMessage(keys.length ? 'เลือกเฉพาะผลงานของคุณ' : 'ไม่มีผลงานเพิ่มเติมให้นำเข้า')
+            }}>ดูผลงานบนเครื่องนี้</NeoButton>
+            {choices.map(key => {
+              const exam = allExams.find(e => key === attemptKey(e.id) || key.startsWith(attemptKey(e.id) + ':score:'))
+              const exerciseId = key.slice(key.indexOf(':') + 1)
+              const title = exercises.find(e => e.id === exerciseId)?.title ?? exerciseId
+              const label = exam ? exam.title + (key.includes(':score:') ? ' · คะแนน ' + key.split(':').pop() : ' · คำตอบที่บันทึกไว้')
+                : (key.startsWith('draft:') ? 'แบบร่าง · ' : 'โจทย์ที่ผ่าน · ') + title
+              return <label key={key} style={{ display: 'block' }}><input type="checkbox" checked={selected.includes(key)}
+                onChange={e => setSelected(e.target.checked ? [...selected, key] : selected.filter(k => k !== key))} /> {label}</label>
+            })}
+            <NeoButton disabled={!ready || importing || !selected.length} onClick={async () => {
+              setImporting(true)
+              try {
+                await importGuest(selected)
+                setChoices([])
+                setSelected([])
+                setImportMessage('ตรวจและนำเข้ารายการที่บัญชียังไม่มีแล้ว')
+              } catch { setImportMessage('นำเข้าไม่ได้ กรุณาลองอีกครั้ง') }
+              finally { setImporting(false) }
+            }}>นำเข้ารายการที่เลือก</NeoButton>
+            <p role="status">{importMessage}</p>
+          </section>}
           <div className="actions">
             {data.user ? (
               <NeoButton tone="white" onClick={logout}>

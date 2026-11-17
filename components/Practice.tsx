@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useReducedMotion, motion } from 'motion/react'
@@ -34,24 +34,20 @@ const Editor = dynamic(
   },
 )
 export function Practice({ exercise: e }: { exercise: Exercise }) {
-  const [answer, setAnswer] = useState(e.starter),
-    [tab, setTab] = useState('กรณีทดสอบ'),
+  const [tab, setTab] = useState('กรณีทดสอบ'),
     [run, R] = useState<Result | null>(null),
     [submitted, S] = useState<Result | null>(null),
     [notice, N] = useState(''),
     [xp, X] = useState(false)
-  const { data, complete } = useProgress(),
+  const { data, complete, records, ready, write } = useProgress(),
     reduce = useReducedMotion(),
     index = exercises.findIndex((x) => x.id === e.id),
     code = e.engine === 'python-pattern',
-    key = 'learnloop:advanced-draft:' + e.id
+    key = 'draft:' + e.id,
+    answer = records[key] ?? (code ? e.starter : '')
   const runRef = useRef<(submit: boolean) => void>(() => {})
-  useEffect(() => {
-    setAnswer(localStorage.getItem(key) ?? (code ? e.starter : ''))
-  }, [key, code, e.starter])
   function edit(s: string) {
-    setAnswer(s)
-    localStorage.setItem(key, s)
+    write(key, s)
     N('')
   }
   function check(submit: boolean) {
@@ -67,6 +63,7 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
     }
   }
   runRef.current = check
+  if (!ready) return <p className="container">กำลังโหลดแบบร่าง…</p>
   return (
     <div className="container content">
       <Link href={modulePath(e.module)} className="crumb">

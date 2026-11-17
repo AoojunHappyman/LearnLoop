@@ -49,7 +49,7 @@ export function Account({ register }: { register: boolean }) {
       />
       <form className="panel" onSubmit={submit}>
         <p className="notice">
-          {authClient ? 'ประวัติการฝึกยังเก็บไว้ในเบราว์เซอร์นี้' : 'ระบบบัญชีอีเมลยังไม่เปิดให้บริการ คุณยังฝึกทำโจทย์แบบผู้เรียนรับเชิญได้'}
+          {authClient ? 'เข้าสู่ระบบเพื่อบันทึกโจทย์ แบบร่าง และผลสอบไว้ในบัญชีของคุณ' : 'ระบบบัญชีอีเมลยังไม่เปิดให้บริการ คุณยังฝึกทำโจทย์แบบผู้เรียนรับเชิญได้'}
         </p>
         <label htmlFor="email">อีเมล</label>
         <input

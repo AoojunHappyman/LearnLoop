@@ -1,10 +1,11 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import Link from 'next/link'
 import { Clock, ClipboardList, ArrowRight } from 'lucide-react'
 import { allExams, examCatalog, topicPractice } from '@/lib/exam'
-import { attemptKey, saveFinishedScore } from '@/lib/exam-results'
+import { useProgress } from '@/lib/progress'
+import { attemptKey } from '@/lib/exam-results'
 import { ExamAttempt, practicePath } from '@/lib/content'
 import { Heading, NeoButton, NeoBadge, NeoProgressBar } from './ui'
 export function Exams() {
@@ -38,50 +39,44 @@ export function ExamRoom({ examId }: { examId: string }) {
   const questions = exam.questions
   const key = attemptKey(examId)
 
-  const [attempt, A] = useState<ExamAttempt | null>(null),
-    [ready, R] = useState(false),
-    [idx, I] = useState(0),
+  const { ready, records, write } = useProgress()
+  const raw = records[key]
+  const attempt = useMemo<ExamAttempt | null>(() => {
+    try {
+      const x = JSON.parse(raw ?? 'null')
+      if (Array.isArray(x?.answers) && x.answers.length === questions.length &&
+          x.answers.every((a: number) => Number.isInteger(a) && a >= -1 && a < 4) &&
+          Number.isFinite(x.deadline) && typeof x.finished === 'boolean') return x
+    } catch {}
+    return null
+  }, [raw, questions.length])
+  function saveAttempt(value: ExamAttempt) {
+    write(key, JSON.stringify(value))
+    if (value.finished) {
+      const score = questions.filter((q,i) => q.correct === value.answers[i]).length
+      write(key + ':score:' + score, String(score))
+    }
+  }
+  const [idx, I] = useState(0),
     [now, N] = useState(Date.now()),
     [open, O] = useState(false)
-  useEffect(() => {
-    try {
-      const x = JSON.parse(localStorage.getItem(key) || 'null')
-      if (
-        x?.answers?.length === questions.length &&
-        Number.isFinite(x.deadline) &&
-        x.answers.every(
-          (a: unknown) =>
-            Number.isInteger(a) && Number(a) >= -1 && Number(a) < 4,
-        ) &&
-        typeof x.finished === 'boolean'
-      )
-        A(x)
-    } catch {}
-    R(true)
-  }, [])
-  useEffect(() => {
-    if (ready && attempt) {
-      localStorage.setItem(key, JSON.stringify(attempt))
-      saveFinishedScore(exam, attempt)
-    }
-  }, [ready, attempt])
   useEffect(() => {
     if (!attempt || attempt.finished) return
     const tick = () => {
       const time = Date.now()
       N(time)
       if (time >= attempt.deadline) {
-        A((a) => a && { ...a, finished: true })
+        saveAttempt({ ...attempt, finished: true })
         O(false)
       }
     }
     tick()
     const t = setInterval(tick, 1000)
     return () => clearInterval(t)
-  }, [attempt?.deadline, attempt?.finished])
+  }, [attempt, ready])
   const start = () => {
     N(Date.now())
-    A({
+    saveAttempt({
       answers: Array(questions.length).fill(-1),
       deadline: Date.now() + exam.minutes * 60_000,
       finished: false,
@@ -217,7 +212,7 @@ export function ExamRoom({ examId }: { examId: string }) {
                 className="option"
                 aria-pressed={attempt.answers[idx] === i}
                 onClick={() =>
-                  A({
+                  saveAttempt({
                     ...attempt,
                     answers: attempt.answers.map((v, j) => (j === idx ? i : v)),
                   })
@@ -260,7 +255,7 @@ export function ExamRoom({ examId }: { examId: string }) {
                       <button
                         className="btn yellow"
                         onClick={() => {
-                          A({ ...attempt, finished: true })
+                          saveAttempt({ ...attempt, finished: true })
                           O(false)
                         }}
                       >
