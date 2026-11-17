@@ -45,7 +45,7 @@ export function CourseCard({ course }: { course: Course }) {
       </div>
       <div className="coursebody">
         <NeoBadge color={course.available ? 'mint' : 'cream'}>
-          {course.available ? '● เปิดให้เรียน' : '◷ กำลังจะเปิด'}
+          {course.available ? '● available' : '◷ กำลังจะเปิด'}
         </NeoBadge>
         <h3>{course.title}</h3>
         <p>{course.description}</p>
@@ -56,7 +56,7 @@ export function CourseCard({ course }: { course: Course }) {
                 <Layers /> {isNetwork ? 6 : isMath ? 6 : modules.length} บท
               </span>
               <span>
-                <Code2 /> {isNetwork ? 20 : isMath ? 120 : exercises.length} ข้อ
+                <Code2 /> {isNetwork ? 50 : isMath ? 120 : exercises.length} ข้อ
               </span>
             </div>
             <div className="metadata">
@@ -117,7 +117,7 @@ export function Catalog() {
         .includes(query.trim().toLowerCase()) &&
       (category === 'ทุกหมวดวิชา' || x.category === category) &&
       (availability === 'ทุกสถานะ' ||
-        x.available === (availability === 'เปิดให้เรียน')),
+        x.available === (availability === 'available')),
   )
   return (
     <div className="container content">
@@ -136,7 +136,7 @@ export function Catalog() {
         </label>
         {[
           [category, c, ['ทุกหมวดวิชา', ...courses.map((x) => x.category)]],
-          [availability, a, ['ทุกสถานะ', 'เปิดให้เรียน', 'กำลังจะเปิด']],
+          [availability, a, ['ทุกสถานะ', 'available', 'กำลังจะเปิด']],
         ].map((entry, i) => {
           const [v, set, items] = entry as [
             string,

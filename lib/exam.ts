@@ -1,3 +1,4 @@
+import { networkChapters } from './network-chapters'
 import type { Exam } from './content'
 import { mathExams, mathFinal } from './math-exams'
 
@@ -222,4 +223,4 @@ export const examCatalog = [
   networkExam,
 ]
 
-export const allExams = [...examCatalog, ...mathExams]
+export const allExams = [...examCatalog, ...mathExams, ...networkChapters]

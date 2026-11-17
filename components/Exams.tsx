@@ -34,7 +34,7 @@ export function Exams() {
   )
 }
 export function ExamRoom({ examId }: { examId: string }) {
-  const isChapter = examId.startsWith('itds113-chapter-')
+  const isChapter = examId.includes('-chapter-')
   const exam = allExams.find((e) => e.id === examId)!
   const questions = exam.questions
   const key = attemptKey(examId)
@@ -91,8 +91,8 @@ export function ExamRoom({ examId }: { examId: string }) {
     )
   return (
     <div className="container content">
-      <Link href={isChapter ? '/courses/itds113' : '/exams'} className="crumb">
-        ← {isChapter ? 'แบบฝึกรายบท ITDS113' : 'ข้อสอบฝึกทำ'}
+      <Link href={isChapter ? '/courses/' + exam.courseId : '/exams'} className="crumb">
+        ← {isChapter ? 'แบบฝึกรายบท ' + exam.courseId.toUpperCase() : 'ข้อสอบฝึกทำ'}
       </Link>
       <Heading kicker="ข้อสอบฝึกทำสำหรับทบทวนด้วยตนเอง" title={exam.title} />
       {!ready ? (

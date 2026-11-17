@@ -1,7 +1,9 @@
+import { NetworkChapter } from './NetworkChapter'
+import { networkChapters } from '@/lib/network-chapters'
+
 export function RoutingReview() {
   return (
-    <details className="panel spaced" open>
-      <summary><strong>Routing Protocols · RIP, OSPF และ BGP</strong></summary>
+    <NetworkChapter title="Routing Protocols · RIP, OSPF และ BGP" source="Chapter_5_rev3.pdf · หน้า 17–25 และ 28–41" exam={networkChapters[0]} open>
       <p className="spaced">เมื่อโจทย์ถามว่าแพ็กเก็ตจะไปทางไหน ให้แยกสองขั้นก่อน โปรโตคอล routing เลือกเส้นทางสำหรับแต่ละ prefix จากนั้นเมื่อแพ็กเก็ตมาถึง เราเตอร์จึงเลือก prefix ที่ตรงยาวที่สุดจากตารางส่งต่อ ค่า hop, cost และ AS-PATH มีความหมายต่างกัน ต้องอ่านว่าโจทย์ใช้โปรโตคอลใด</p>
       <h3 className="spaced">RIP · Distance Vector</h3>
       <p>แต่ละเราเตอร์เรียนระยะทางจากเพื่อนบ้านแล้วบวกอีกหนึ่ง hop ถ้า B บอกว่าถึงเครือข่าย X ใน 2 hops และ C บอกว่าใช้ 4 hops เราเตอร์ A จะได้เส้นทางผ่าน B เท่ากับ 3 hops และผ่าน C เท่ากับ 5 hops จึงเลือก B แม้ลิงก์ผ่าน C จะมีความเร็วสูงกว่า RIP ใช้ได้ถึง 15 hops และถือค่า 16 ว่าไปไม่ถึง</p>
@@ -15,7 +17,6 @@ export function RoutingReview() {
       <h3 className="spaced">ลองตัดสินใจเหมือนในห้องสอบ</h3>
       <p>เราเตอร์มีเส้นทางไป prefix เดียวกันผ่าน G1 (LOCAL_PREF 200, AS-PATH ยาว 3, OSPF cost ถึง gateway 20) และ G2 (LOCAL_PREF 100, AS-PATH ยาว 2, cost 5) ทั้งสองทางใช้งานได้ ถ้าปัจจัยอื่นเท่ากันจะออกทางใด และหากปรับ LOCAL_PREF ของ G2 เป็น 200 คำตอบเปลี่ยนอย่างไร?</p>
       <details className="spaced"><summary>ดูเฉลยพร้อมเหตุผล</summary><p>ครั้งแรกเลือก G1 เพราะ LOCAL_PREF 200 สูงกว่า เมื่อปรับให้เท่ากัน เลือก G2 เพราะ AS-PATH สั้นกว่า ทั้งสองกรณีตัดสินได้ก่อนถึงขั้นเปรียบเทียบ cost ภายใน ส่วน OSPF ยังมีหน้าที่พาแพ็กเก็ตไปถึง gateway ที่เลือก</p></details>
-      <small>อ่านเพิ่มเติมใน Chapter_5_rev3.pdf · หน้า 17–25 และ 28–41</small>
-    </details>
+    </NetworkChapter>
   )
 }

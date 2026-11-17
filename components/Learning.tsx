@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import { SyntaxCheatsheet } from './SyntaxCheatsheet'
 import { ArrowRight, ChevronRight, Check, BookOpen } from 'lucide-react'
 import {
   coursePath,
@@ -55,6 +56,7 @@ export function CoursePage() {
           </ul>
         </section>
       </div>
+      <SyntaxCheatsheet />
       <div className="spaced">
         <small>เส้นทางการเรียน</small>
         <h2>บทเรียนในวิชานี้</h2>

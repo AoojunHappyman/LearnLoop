@@ -1119,3 +1119,72 @@ html:lang(th) :is(h1, h2, h3, .hero mark) {
 html:lang(th) .hero mark {
   padding-inline: 0.12em;
 }
+
+.network-course {
+  max-width: 68rem;
+}
+.network-chapter {
+  margin-block: 1.25rem;
+}
+.network-chapter > summary {
+  cursor: pointer;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+}
+.network-reading {
+  max-width: 51rem;
+  margin-block: 1.25rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.network-reading > p,
+.network-reading > .spaced {
+  margin-block: 1rem 0;
+}
+.network-reading > h3,
+.network-reading > div {
+  padding-top: .5rem;
+}
+.network-reading > details {
+  background: #faf7ee;
+  border-inline-start: 3px solid currentColor;
+  padding: .65rem 1rem;
+}
+.network-reading details[open] > p {
+  margin-top: .65rem;
+}
+.network-chapter-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #d7d2c8;
+}
+.network-chapter-end p {
+  flex: 1 1 20rem;
+  margin: 0;
+  font-size: .9rem;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .network-chapter-end {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .network-chapter-end p {
+    flex: auto;
+  }
+}
+
+.syntax-sheet details {
+  padding-block: 1rem;
+  border-top: 1px solid #d7d2c8;
+}
+.syntax-sheet summary {
+  cursor: pointer;
+}
+.syntax-sheet pre {
+  overflow-x: auto;
+  margin-block: 1rem;
+}
