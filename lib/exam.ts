@@ -1,5 +1,5 @@
 import type { Exam } from './content'
-import { mathFinal } from './math-exams'
+import { mathExams, mathFinal } from './math-exams'
 
 export const exam: Exam = {
   id: 'itds120-mock',
@@ -218,3 +218,5 @@ export const examCatalog = [
   },
   mathFinal,
 ]
+
+export const allExams = [...examCatalog, ...mathExams]

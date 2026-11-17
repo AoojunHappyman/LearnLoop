@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import Link from 'next/link'
 import { Clock, ClipboardList, ArrowRight } from 'lucide-react'
-import { examCatalog, topicPractice } from '@/lib/exam'
+import { allExams, examCatalog, topicPractice } from '@/lib/exam'
 import { attemptKey, saveFinishedScore } from '@/lib/exam-results'
 import { ExamAttempt, practicePath } from '@/lib/content'
 import { Heading, NeoButton, NeoBadge, NeoProgressBar } from './ui'
@@ -33,7 +33,8 @@ export function Exams() {
   )
 }
 export function ExamRoom({ examId }: { examId: string }) {
-  const exam = examCatalog.find((e) => e.id === examId)!
+  const isChapter = examId.startsWith('itds113-chapter-')
+  const exam = allExams.find((e) => e.id === examId)!
   const questions = exam.questions
   const key = attemptKey(examId)
 
@@ -95,8 +96,8 @@ export function ExamRoom({ examId }: { examId: string }) {
     )
   return (
     <div className="container content">
-      <Link href="/exams" className="crumb">
-        ← ข้อสอบฝึกทำ
+      <Link href={isChapter ? '/courses/itds113' : '/exams'} className="crumb">
+        ← {isChapter ? 'แบบฝึกรายบท ITDS113' : 'ข้อสอบฝึกทำ'}
       </Link>
       <Heading kicker="ข้อสอบฝึกทำสำหรับทบทวนด้วยตนเอง" title={exam.title} />
       {!ready ? (

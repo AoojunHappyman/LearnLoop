@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { ArrowRight, ClipboardList } from 'lucide-react'
-import { mathFinal } from '@/lib/math-exams'
+import { mathExams } from '@/lib/math-exams'
 import { courses } from '@/lib/content'
-import { Heading, NeoButton } from './ui'
+import { Heading, NeoBadge, NeoButton } from './ui'
 
 export function MathCourse() {
   const course = courses.find((c) => c.id === 'itds113')!
@@ -11,20 +11,36 @@ export function MathCourse() {
       <Link href="/courses" className="crumb">
         ← กลับไปที่คลังรายวิชา
       </Link>
-      <Heading kicker="ITDS113 · เตรียมไฟนอล" title={course.title}>
-        ทบทวนสถิติและความน่าจะเป็นจากบทที่ 1–6 ด้วยข้อสอบปรนัยชุดเดียว 50 ข้อ
+      <Heading kicker="ITDS113 · แบบฝึกรายบท" title={course.title}>
+        ทบทวนสถิติและความน่าจะเป็นจากบทที่ 1–6 ด้วยข้อสอบปรนัยบทละ 20 ข้อ รวม 120 ข้อ
       </Heading>
       <div className="panel level">
         <ClipboardList size={32} />
-        <h3>ข้อสอบเตรียมไฟนอล ITDS113</h3>
-        <p>ปรนัย 4 ตัวเลือก · {mathFinal.questions.length} ข้อ · {mathFinal.minutes} นาที</p>
-        <p>ส่งคำตอบแล้วดูคะแนนแยกตามบทและเฉลยอธิบายได้ทุกข้อ</p>
-        <NeoButton href={'/exams/' + mathFinal.id}>
-          เปิดข้อสอบ <ArrowRight size={16} />
-        </NeoButton>
+        <h3>เลือกบทที่ต้องการฝึก</h3>
+        <p>
+          แต่ละชุดมี 4 ตัวเลือกต่อข้อ ใช้เวลา 40 นาที
+          ส่งคำตอบแล้วดูคะแนนและเหตุผลประกอบเฉลยได้ทุกข้อ
+        </p>
+        <p>
+          ข้อสอบจัดทำใหม่สำหรับฝึกทบทวนตามหัวข้อในเอกสารที่ได้รับ บทที่ 4 รวมเนื้อหาทั้งสองส่วน
+        </p>
       </div>
-      <h2 className="spaced">บทที่ออกสอบ</h2>
-      <ol>{mathFinal.topics.map((topic, i) => <li key={topic}>บทที่ {i + 1} · {topic}</li>)}</ol>
+      <h2 className="spaced">บทเรียนในวิชานี้</h2>
+      <div className="grid2">
+        {mathExams.map((exam, i) => (
+          <section className="panel" key={exam.id}>
+            <small>บทที่ {i + 1}</small>
+            <h3>{exam.topics[0]}</h3>
+            <p>{exam.summary}</p>
+            <div className="spaced">
+              <NeoBadge color="purple">ปรนัย 20 ข้อ · 40 นาที</NeoBadge>
+            </div>
+            <NeoButton href={'/exams/' + exam.id}>
+              ฝึกบทนี้ <ArrowRight size={16} />
+            </NeoButton>
+          </section>
+        ))}
+      </div>
     </div>
   )
 }
