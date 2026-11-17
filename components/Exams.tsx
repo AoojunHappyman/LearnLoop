@@ -10,7 +10,7 @@ export function Exams() {
   return (
     <div className="container content">
       <Heading kicker="เตรียมสอบ" title="ข้อสอบฝึกทำ">
-        เลือกวิชาและบทที่ต้องการทบทวน ฝึกทำข้อสอบจับเวลา พร้อมเฉลยอธิบายหลังส่งคำตอบ
+        เลือกวิชาที่ต้องการทบทวน ฝึกทำข้อสอบจับเวลา พร้อมเฉลยอธิบายหลังส่งคำตอบ
       </Heading>
       <div className="grid2">
         {examCatalog.map((exam) => (

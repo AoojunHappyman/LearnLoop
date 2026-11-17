@@ -7,7 +7,7 @@ import { useProgress } from '@/lib/progress'
 const links = [
   ['หน้าแรก', '/'],
   ['สำรวจรายวิชา', '/courses'],
-  ['ฝึกทำโจทย์', '/practice/dict-key'],
+  ['ข้อสอบเตรียมไฟนอล', '/exams'],
 ]
 export function Logo() {
   return (
@@ -41,6 +41,16 @@ export function Navbar() {
               {n}
             </Link>
           ))}
+          <a
+            href="https://exmello.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="เพื่อนดูแลใจของนักศึกษาในช่วงสอบ"
+            aria-label="EXMELLO เพื่อนดูแลใจของนักศึกษาในช่วงสอบ (เปิดแท็บใหม่)"
+            onClick={() => set(false)}
+          >
+            EXMELLO <ArrowUpRight size={14} className="inline" aria-hidden="true" />
+          </a>
           <Link
             className="mobileaccount"
             onClick={() => set(false)}

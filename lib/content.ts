@@ -89,7 +89,7 @@ export const courses: Course[] = [
     title:
       'Mathematics and Statistics Foundation for Digital Science and Technology',
     category: 'คณิตศาสตร์และสถิติ',
-    description: 'เตรียมไฟนอลสถิติและความน่าจะเป็น 6 บท พร้อมข้อสอบปรนัย 120 ข้อ',
+    description: 'เตรียมไฟนอลสถิติและความน่าจะเป็น 6 บท พร้อมข้อสอบปรนัยชุดเดียว 50 ข้อ',
     available: true,
   },
   {

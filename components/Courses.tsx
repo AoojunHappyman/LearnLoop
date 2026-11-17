@@ -55,7 +55,7 @@ export function CourseCard({ course }: { course: Course }) {
                 <Layers /> {isMath ? 6 : modules.length} บท
               </span>
               <span>
-                <Code2 /> {isMath ? 120 : exercises.length} ข้อ
+                <Code2 /> {isMath ? 50 : exercises.length} ข้อ
               </span>
             </div>
             <div className="metadata">
