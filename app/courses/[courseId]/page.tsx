@@ -1,3 +1,4 @@
+import { NetworkCourse } from '@/components/NetworkCourse'
 import { CoursePage } from '@/components/Learning'
 import { courses } from '@/lib/content'
 import { MathCourse } from '@/components/MathCourse'
@@ -11,5 +12,6 @@ export default async function Page({
   params: Promise<{ courseId: string }>
 }) {
   const p = await params
+  if (p.courseId === 'itds231') return <NetworkCourse />
   return p.courseId === 'itds113' ? <MathCourse /> : <CoursePage />
 }

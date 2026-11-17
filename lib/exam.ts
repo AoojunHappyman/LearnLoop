@@ -208,6 +208,8 @@ export const topicPractice: Record<string, string> = {
   Pandas: 'pandas-select',
 }
 
+import { networkExam } from './network'
+
 export const examCatalog = [
   {
     ...exam,
@@ -217,6 +219,7 @@ export const examCatalog = [
     questions,
   },
   mathFinal,
+  networkExam,
 ]
 
 export const allExams = [...examCatalog, ...mathExams]

@@ -97,8 +97,8 @@ export const courses: Course[] = [
     id: 'itds231',
     title: 'Computer Networks',
     category: 'เครือข่ายคอมพิวเตอร์',
-    description: 'อยู่ระหว่างเตรียมบทเรียนและแบบฝึกหัดด้านเครือข่ายคอมพิวเตอร์',
-    available: false,
+    description: 'สรุปเครือข่ายคอมพิวเตอร์ 6 หัวข้อ รวม Routing Protocols พร้อมข้อสอบเตรียมไฟนอล',
+    available: true,
   },
   {
     year: 2,

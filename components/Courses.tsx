@@ -27,6 +27,7 @@ export function CourseCard({ course }: { course: Course }) {
     Icon = icons[i],
     { data } = useProgress()
   const isMath = course.id === 'itds113'
+  const isNetwork = course.id === 'itds231'
   const completed = currentSubmissions(data.submissions).length
   const body = (
     <>
@@ -52,17 +53,17 @@ export function CourseCard({ course }: { course: Course }) {
           <>
             <div className="metadata">
               <span>
-                <Layers /> {isMath ? 6 : modules.length} บท
+                <Layers /> {isNetwork ? 6 : isMath ? 6 : modules.length} บท
               </span>
               <span>
-                <Code2 /> {isMath ? 120 : exercises.length} ข้อ
+                <Code2 /> {isNetwork ? 20 : isMath ? 120 : exercises.length} ข้อ
               </span>
             </div>
             <div className="metadata">
-              {isMath ? 'ปรนัย · แบบฝึกรายบท' : 'Python · เตรียมไฟนอล'}{' '}
+              {isNetwork ? 'สรุป · ข้อสอบเตรียมไฟนอล' : isMath ? 'ปรนัย · แบบฝึกรายบท' : 'Python · เตรียมไฟนอล'}{' '}
               <ArrowUpRight />
             </div>
-            {!isMath && completed > 0 && (
+            {course.id === 'itds120' && completed > 0 && (
               <NeoProgressBar
                 value={Math.round((completed * 100) / exercises.length)}
               />
