@@ -27,6 +27,7 @@ export interface Exercise {
   difficulty: string
 }
 export interface Course {
+  year: number
   id: string
   title: string
   category: string
@@ -75,6 +76,7 @@ export interface ExamAttempt {
 }
 export const courses: Course[] = [
   {
+    year: 1,
     id: 'itds120',
     title: 'Fundamentals of Programming',
     category: 'การเขียนโปรแกรม',
@@ -82,8 +84,10 @@ export const courses: Course[] = [
     available: true,
   },
   {
+    year: 1,
     id: 'itds113',
-    title: 'Mathematics and Statistics Foundation for Digital Science and Technology',
+    title:
+      'Mathematics and Statistics Foundation for Digital Science and Technology',
     category: 'คณิตศาสตร์และสถิติ',
     description: 'เตรียมไฟนอลสถิติและความน่าจะเป็น 6 บท พร้อมข้อสอบปรนัย 120 ข้อ',
     available: true,
@@ -805,4 +809,3 @@ export function currentSubmissions(submissions: Submission[]) {
   return submissions.filter((s) => currentExerciseIds.has(s.exerciseId))
 }
 export const featured = exercises[0]
-

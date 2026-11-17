@@ -79,13 +79,36 @@ export function CourseCard({ course }: { course: Course }) {
     <article className="coursecard">{body}</article>
   )
 }
+export function CourseGroups({ items }: { items: Course[] }) {
+  const years = [...new Set(items.map((course) => course.year))].sort(
+    (a, b) => a - b,
+  )
+  return (
+    <>
+      {years.map((year) => (
+        <section key={year} aria-labelledby={'course-year-' + year}>
+          <h3 id={'course-year-' + year} className="spaced">
+            Year {year}
+          </h3>
+          <div className="grid2">
+            {items
+              .filter((course) => course.year === year)
+              .map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
+          </div>
+        </section>
+      ))}
+    </>
+  )
+}
 export function Catalog() {
   const [query, q] = useState(''),
     [category, c] = useState('ทุกหมวดวิชา'),
     [availability, a] = useState('ทุกสถานะ')
   const list = courses.filter(
     (x) =>
-      (' ' + x.title + ' ' + x.id + ' ' + x.category)
+      (' ' + x.title + ' ' + x.id + ' ' + x.category + ' Year ' + x.year)
         .toLowerCase()
         .includes(query.trim().toLowerCase()) &&
       (category === 'ทุกหมวดวิชา' || x.category === category) &&
@@ -133,11 +156,7 @@ export function Catalog() {
       <p className="mono" role="status">
         {list.length} รายวิชา
       </p>
-      <div className="grid2">
-        {list.map((course) => (
-          <CourseCard course={course} key={course.id} />
-        ))}
-      </div>
+      <CourseGroups items={list} />
       {!list.length && <p>ไม่พบรายวิชาที่ตรงกัน ลองเปลี่ยนคำค้นหรือตัวกรอง</p>}
     </div>
   )

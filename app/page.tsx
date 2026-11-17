@@ -13,7 +13,7 @@ import {
   Star,
 } from 'lucide-react'
 import { courses } from '@/lib/content'
-import { CourseCard } from '@/components/Courses'
+import { CourseGroups } from '@/components/Courses'
 import { NeoButton } from '@/components/ui'
 export default function Home() {
   return (
@@ -28,7 +28,10 @@ export default function Home() {
             <br />
             ของชาว <mark>DST</mark>
           </h1>
-          <p>ทบทวนสิ่งที่เรียนในหลักสูตร DST ลองทำโจทย์ด้วยตัวเอง และติดตามความก้าวหน้าในแต่ละบท</p>
+          <p>
+            ทบทวนสิ่งที่เรียนในหลักสูตร DST ลองทำโจทย์ด้วยตัวเอง
+            และติดตามความก้าวหน้าในแต่ละบท
+          </p>
           <div className="actions">
             <NeoButton href="/courses/itds120">
               เริ่มฝึก ITDS120 <ArrowRight size={18} />
@@ -82,11 +85,7 @@ export default function Home() {
             ดูรายวิชาทั้งหมด <ArrowRight size={17} />
           </Link>
         </div>
-        <div className="grid2">
-          {courses.map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
-        </div>
+        <CourseGroups items={courses} />
       </section>
       <section className="band">
         <div className="container section">
