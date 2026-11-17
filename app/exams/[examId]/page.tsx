@@ -1,8 +1,8 @@
 import { ExamRoom } from '@/components/Exams'
-import { modules, exercises } from '@/lib/content'
+import { examCatalog } from '@/lib/exam'
 export const dynamicParams = false
 export function generateStaticParams() {
-  return [{ examId: 'itds120-mock' }]
+  return examCatalog.map((exam) => ({ examId: exam.id }))
 }
 export default async function Page({
   params,
@@ -10,5 +10,5 @@ export default async function Page({
   params: Promise<{ examId: string }>
 }) {
   const p = await params
-  return <ExamRoom />
+  return <ExamRoom key={p.examId} examId={p.examId} />
 }

@@ -15,7 +15,6 @@ import {
   modules,
   exercises,
   currentSubmissions,
-  coursePath,
 } from '@/lib/content'
 import { useProgress } from '@/lib/progress'
 import { Heading, NeoBadge, NeoProgressBar } from './ui'
@@ -24,13 +23,12 @@ export function CourseCard({ course }: { course: Course }) {
   const i = courses.findIndex((item) => item.id === course.id),
     Icon = icons[i],
     { data } = useProgress()
+  const isMath = course.id === 'itds113'
   const completed = currentSubmissions(data.submissions).length
   const body = (
     <>
       <div className={'cover cover' + i}>
-        <span className="coverlabel">
-          {course.id.toUpperCase()}
-        </span>
+        <span className="coverlabel">{course.id.toUpperCase()}</span>
         <span className="artlines" aria-hidden="true">
           ✦
         </span>
@@ -51,16 +49,17 @@ export function CourseCard({ course }: { course: Course }) {
           <>
             <div className="metadata">
               <span>
-                <Layers /> {modules.length} บท
+                <Layers /> {isMath ? 6 : modules.length} บท
               </span>
               <span>
-                <Code2 /> {exercises.length} ข้อ
+                <Code2 /> {isMath ? 120 : exercises.length} ข้อ
               </span>
             </div>
             <div className="metadata">
-              Python · เตรียมไฟนอล <ArrowUpRight />
+              {isMath ? 'ปรนัย · เตรียมไฟนอล' : 'Python · เตรียมไฟนอล'}{' '}
+              <ArrowUpRight />
             </div>
-            {completed > 0 && (
+            {!isMath && completed > 0 && (
               <NeoProgressBar
                 value={Math.round((completed * 100) / exercises.length)}
               />
@@ -73,7 +72,7 @@ export function CourseCard({ course }: { course: Course }) {
     </>
   )
   return course.available ? (
-    <Link className="coursecard" href={coursePath}>
+    <Link className="coursecard" href={'/courses/' + course.id}>
       {body}
     </Link>
   ) : (

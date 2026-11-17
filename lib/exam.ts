@@ -1,4 +1,5 @@
 import type { Exam } from './content'
+import { mathExams } from './math-exams'
 
 export const exam: Exam = {
   id: 'itds120-mock',
@@ -206,3 +207,14 @@ export const topicPractice: Record<string, string> = {
   NumPy: 'numpy-axis',
   Pandas: 'pandas-select',
 }
+
+export const examCatalog = [
+  {
+    ...exam,
+    courseId: 'itds120',
+    title: 'ข้อสอบเตรียมไฟนอล ITDS120',
+    summary: 'Dictionary · Function · File I/O · NumPy · Pandas',
+    questions,
+  },
+  ...mathExams,
+]

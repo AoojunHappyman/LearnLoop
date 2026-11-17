@@ -1,8 +1,9 @@
 import { CoursePage } from '@/components/Learning'
-import { modules, exercises } from '@/lib/content'
+import { courses } from '@/lib/content'
+import { MathCourse } from '@/components/MathCourse'
 export const dynamicParams = false
 export function generateStaticParams() {
-  return [{ courseId: 'itds120' }]
+  return courses.filter((c) => c.available).map((c) => ({ courseId: c.id }))
 }
 export default async function Page({
   params,
@@ -10,5 +11,5 @@ export default async function Page({
   params: Promise<{ courseId: string }>
 }) {
   const p = await params
-  return <CoursePage />
+  return p.courseId === 'itds113' ? <MathCourse /> : <CoursePage />
 }

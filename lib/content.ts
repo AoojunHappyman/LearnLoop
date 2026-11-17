@@ -85,8 +85,8 @@ export const courses: Course[] = [
     id: 'itds113',
     title: 'Mathematics and Statistics Foundation for Digital Science and Technology',
     category: 'คณิตศาสตร์และสถิติ',
-    description: 'พื้นฐานคณิตศาสตร์และสถิติสำหรับวิทยาการและเทคโนโลยีดิจิทัล',
-    available: false,
+    description: 'เตรียมไฟนอลสถิติและความน่าจะเป็น 6 บท พร้อมข้อสอบปรนัย 120 ข้อ',
+    available: true,
   },
 ]
 export const modules: Module[] = [
