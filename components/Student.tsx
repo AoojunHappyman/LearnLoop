@@ -1,5 +1,8 @@
 'use client'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { examCatalog } from '@/lib/exam'
+import { readBestScore } from '@/lib/exam-results'
 import { usePathname } from 'next/navigation'
 import {
   BarChart,
@@ -129,6 +132,15 @@ function ActivityChart({ week }: { week: { day: string; solved: number }[] }) {
   )
 }
 export function Student({ section }: { section: keyof typeof sections }) {
+  const [bestScores, setBestScores] = useState<Record<string, number>>({})
+  useEffect(() => {
+    const refresh = () => setBestScores(Object.fromEntries(
+      examCatalog.map((exam) => [exam.id, readBestScore(exam)]),
+    ))
+    refresh()
+    window.addEventListener('storage', refresh)
+    return () => window.removeEventListener('storage', refresh)
+  }, [])
   const { data, logout } = useProgress(),
     done = currentSubmissions(data.submissions).map((x) => x.exerciseId),
     { xp, week, streak, earnedWeek } = analytics(data.submissions),
@@ -188,6 +200,14 @@ export function Student({ section }: { section: keyof typeof sections }) {
       unit: 'ข้อ',
       Icon: Trophy,
     },
+    ...examCatalog.map((exam) => ({
+      title: 'พร้อมสอบ ' + exam.courseId.toUpperCase(),
+      description: 'ตอบถูกอย่างน้อย 80% ในข้อสอบเตรียมไฟนอลหนึ่งครั้ง',
+      count: bestScores[exam.id] || 0,
+      target: Math.ceil(exam.questions.length * 0.8),
+      unit: 'ข้อ',
+      Icon: Trophy,
+    })),
   ].map((award) => ({
     ...award,
     earned: award.count >= award.target,

@@ -4,6 +4,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import Link from 'next/link'
 import { Clock, ClipboardList, ArrowRight } from 'lucide-react'
 import { examCatalog, topicPractice } from '@/lib/exam'
+import { attemptKey, saveFinishedScore } from '@/lib/exam-results'
 import { ExamAttempt, practicePath } from '@/lib/content'
 import { Heading, NeoButton, NeoBadge, NeoProgressBar } from './ui'
 export function Exams() {
@@ -34,10 +35,7 @@ export function Exams() {
 export function ExamRoom({ examId }: { examId: string }) {
   const exam = examCatalog.find((e) => e.id === examId)!
   const questions = exam.questions
-  const key =
-    examId === 'itds120-mock'
-      ? 'learnloop:exam:itds120-final:v1'
-      : 'learnloop:exam:' + examId + ':v1'
+  const key = attemptKey(examId)
 
   const [attempt, A] = useState<ExamAttempt | null>(null),
     [ready, R] = useState(false),
@@ -61,7 +59,10 @@ export function ExamRoom({ examId }: { examId: string }) {
     R(true)
   }, [])
   useEffect(() => {
-    if (ready && attempt) localStorage.setItem(key, JSON.stringify(attempt))
+    if (ready && attempt) {
+      localStorage.setItem(key, JSON.stringify(attempt))
+      saveFinishedScore(exam, attempt)
+    }
   }, [ready, attempt])
   useEffect(() => {
     if (!attempt || attempt.finished) return
