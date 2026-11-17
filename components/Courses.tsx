@@ -4,6 +4,9 @@ import { useState } from 'react'
 import {
   Terminal,
   Calculator,
+  Network,
+  PanelsTopLeft,
+  Workflow,
   ArrowUpRight,
   Search,
   Layers,
@@ -18,7 +21,7 @@ import {
 } from '@/lib/content'
 import { useProgress } from '@/lib/progress'
 import { Heading, NeoBadge, NeoProgressBar } from './ui'
-const icons = [Terminal, Calculator]
+const icons = [Terminal, Calculator, Network, PanelsTopLeft, Workflow]
 export function CourseCard({ course }: { course: Course }) {
   const i = courses.findIndex((item) => item.id === course.id),
     Icon = icons[i],

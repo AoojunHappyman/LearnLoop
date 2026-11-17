@@ -92,6 +92,30 @@ export const courses: Course[] = [
     description: 'เตรียมไฟนอลสถิติและความน่าจะเป็น 6 บท พร้อมข้อสอบปรนัย 120 ข้อ',
     available: true,
   },
+  {
+    year: 2,
+    id: 'itds231',
+    title: 'Computer Networks',
+    category: 'เครือข่ายคอมพิวเตอร์',
+    description: 'อยู่ระหว่างเตรียมบทเรียนและแบบฝึกหัดด้านเครือข่ายคอมพิวเตอร์',
+    available: false,
+  },
+  {
+    year: 2,
+    id: 'itds241',
+    title: 'Web Technologies and Application',
+    category: 'การพัฒนาเว็บ',
+    description: 'อยู่ระหว่างเตรียมบทเรียนและแบบฝึกหัดด้านเทคโนโลยีเว็บและแอปพลิเคชัน',
+    available: false,
+  },
+  {
+    year: 2,
+    id: 'itds261',
+    title: 'Introduction to Software Engineering',
+    category: 'วิศวกรรมซอฟต์แวร์',
+    description: 'อยู่ระหว่างเตรียมบทเรียนและแบบฝึกหัดพื้นฐานวิศวกรรมซอฟต์แวร์',
+    available: false,
+  },
 ]
 export const modules: Module[] = [
   {
