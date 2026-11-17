@@ -4,31 +4,52 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { Heading, NeoButton } from './ui'
-import { useProgress } from '@/lib/progress'
+import { authClient } from '@/lib/auth'
 export function Account({ register }: { register: boolean }) {
   const [show, S] = useState(false),
     [err, E] = useState(''),
-    { login } = useProgress(),
+    [busy, setBusy] = useState(false),
+    [notice, setNotice] = useState(''),
     router = useRouter()
-  function submit(ev: FormEvent<HTMLFormElement>) {
+  async function submit(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault()
+    if (!authClient || busy) return
+    E('')
+    setNotice('')
     const f = new FormData(ev.currentTarget)
     if (register && f.get('password') !== f.get('confirm')) {
       E('กรุณากรอกรหัสผ่านทั้งสองช่องให้ตรงกัน')
       return
     }
-    login(String(f.get('email')).split('@')[0])
-    router.push('/dashboard')
+    const credentials = { email: String(f.get('email')).trim(), password: String(f.get('password')) }
+    setBusy(true)
+    try {
+      const { data, error } = register
+        ? await authClient.auth.signUp({ ...credentials, options: { emailRedirectTo: window.location.origin + '/dashboard/' } })
+        : await authClient.auth.signInWithPassword(credentials)
+      if (error) {
+        E(error.code === 'invalid_credentials' ? 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' :
+          error.code === 'email_not_confirmed' ? 'กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ' : error.message)
+      } else if (data.session) {
+        router.replace('/dashboard')
+      } else {
+        setNotice('ตรวจกล่องจดหมายของคุณ แล้วกดลิงก์ยืนยันอีเมลเพื่อเริ่มใช้งาน')
+      }
+    } catch {
+      E('เชื่อมต่อบริการบัญชีไม่ได้ กรุณาลองอีกครั้ง')
+    } finally {
+      setBusy(false)
+    }
   }
   return (
     <div className="container content auth">
       <Heading
-        kicker="LearnLoop รุ่นทดลอง"
+        kicker="บัญชี LearnLoop"
         title={register ? 'เริ่มใช้งาน' : 'ยินดีต้อนรับกลับมา'}
       />
       <form className="panel" onSubmit={submit}>
         <p className="notice">
-          ทดลองใช้งานด้วยอีเมลและรหัสผ่านสมมติ ระบบจะบันทึกเฉพาะชื่อที่ใช้แสดงไว้ในเบราว์เซอร์นี้
+          {authClient ? 'ประวัติการฝึกยังเก็บไว้ในเบราว์เซอร์นี้' : 'ระบบบัญชีอีเมลยังไม่เปิดให้บริการ คุณยังฝึกทำโจทย์แบบผู้เรียนรับเชิญได้'}
         </p>
         <label htmlFor="email">อีเมล</label>
         <input
@@ -38,7 +59,7 @@ export function Account({ register }: { register: boolean }) {
           placeholder="student@example.edu"
           required
         />
-        <label htmlFor="password">รหัสผ่านสำหรับทดลอง</label>
+        <label htmlFor="password">รหัสผ่าน</label>
         <div className="split">
           <input
             type={show ? 'text' : 'password'}
@@ -47,7 +68,7 @@ export function Account({ register }: { register: boolean }) {
             minLength={8}
             required
             placeholder="อย่างน้อย 8 ตัวอักษร"
-            autoComplete="off"
+            autoComplete={register ? 'new-password' : 'current-password'}
           />
           <button
             type="button"
@@ -66,16 +87,17 @@ export function Account({ register }: { register: boolean }) {
               name="confirm"
               type={show ? 'text' : 'password'}
               required
-              autoComplete="off"
+              autoComplete={register ? 'new-password' : 'current-password'}
             />
           </>
         )}
         <p className="formerror" role="alert">
           {err}
         </p>
+        {notice && <p role="status">{notice}</p>}
         <div className="actions">
-          <NeoButton>
-            {register ? 'สร้างโปรไฟล์ทดลอง' : 'เข้าสู่ระบบทดลอง'}{' '}
+          <NeoButton disabled={!authClient || busy}>
+            {register ? 'สมัครด้วยอีเมล' : 'เข้าสู่ระบบ'}{' '}
             <ArrowRight size={17} />
           </NeoButton>
         </div>

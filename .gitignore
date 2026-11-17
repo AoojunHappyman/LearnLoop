@@ -8,3 +8,4 @@ public/monaco/
 .next-dev/
 
 .next-production/
+/.env.local

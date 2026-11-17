@@ -356,10 +356,10 @@ export function Student({ section }: { section: keyof typeof sections }) {
           <div className="actions">
             {data.user ? (
               <NeoButton tone="white" onClick={logout}>
-                ออกจากระบบทดลอง
+                ออกจากระบบ
               </NeoButton>
             ) : (
-              <NeoButton href="/login">เข้าสู่ระบบทดลอง</NeoButton>
+              <NeoButton href="/login">เข้าสู่ระบบ</NeoButton>
             )}
           </div>
         </>
