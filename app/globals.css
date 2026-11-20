@@ -1188,3 +1188,76 @@ html:lang(th) .hero mark {
   overflow-x: auto;
   margin-block: 1rem;
 }
+
+.network-lab h2 {
+  margin-bottom: 1.5rem;
+}
+.network-lab-controls {
+  display: grid;
+  grid-template-columns: minmax(7rem, .35fr) minmax(0, 1fr);
+  align-items: end;
+  gap: 1.25rem;
+  margin-block: 1rem 1.5rem;
+}
+.network-lab label {
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+  min-width: 0;
+  font-weight: 600;
+}
+.network-lab select {
+  width: 100%;
+  min-height: 48px;
+  margin: 0;
+}
+.network-lab input[type='range'] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 0;
+  margin: 0;
+  accent-color: #6252a3;
+  cursor: pointer;
+}
+.network-lab-result {
+  padding: 1rem 1.25rem;
+  background: #f0ebff;
+  border: 1px solid #c8bfdd;
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+  line-height: 1.8;
+}
+.network-lab-result p {
+  margin: 0;
+}
+.network-lab-explanation {
+  margin-top: 1rem;
+  line-height: 1.8;
+}
+.network-lab-cost {
+  max-width: 32rem;
+  margin-block: 1.25rem;
+}
+.network-lab-steps li {
+  margin-block: .75rem;
+  line-height: 1.8;
+}
+.network-lab .actions {
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.network-lab button:disabled {
+  opacity: .5;
+  cursor: default;
+}
+@media (max-width: 600px) {
+  .network-lab-controls {
+    grid-template-columns: 1fr;
+  }
+  .network-lab .actions > button {
+    flex: 1 1 12rem;
+  }
+}

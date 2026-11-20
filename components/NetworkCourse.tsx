@@ -1,3 +1,5 @@
+import { NetworkLab } from './NetworkLab'
+import { NetworkWalkthroughs } from './NetworkWalkthroughs'
 import { networkChapters } from '@/lib/network-chapters'
 import { NetworkChapter } from './NetworkChapter'
 import { RoutingReview } from './RoutingReview'
@@ -14,6 +16,8 @@ export function NetworkCourse() {
       <p>ปรนัย {networkExam.questions.length} ข้อ · {networkExam.minutes} นาที พร้อมเฉลยแยกตามหัวข้อหลังส่งคำตอบ</p>
       <NeoButton href={'/exams/' + networkExam.id}>เปิดข้อสอบ ITDS231</NeoButton>
     </section>
+    <NetworkLab />
+    <NetworkWalkthroughs />
     <h2 className="spaced">สรุปเนื้อหา</h2>
     <RoutingReview />
     {networkTopics.map((t, i) => <NetworkChapter key={t.title} title={t.title} source={t.source} exam={networkChapters[i + 1]}>

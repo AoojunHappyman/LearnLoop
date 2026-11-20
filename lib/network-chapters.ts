@@ -1,9 +1,16 @@
+import { networkExtra } from './network-extra'
 import { networkTopics } from './network'
 
 function chapter(slug: string, topic: string, items: [string, string[], number, string][]) {
+  const extra: [string, string[], number, string][] = networkExtra[slug].map(([prompt, answer, ...rest], i) => {
+    const explanation = rest.pop()!
+    const correct = i % 4
+    rest.splice(correct, 0, answer)
+    return [prompt, rest, correct, explanation]
+  })
   return { id: 'itds231-chapter-' + slug, courseId: 'itds231', title: 'ITDS231 · ' + topic,
-    summary: 'แบบฝึกรายบท', minutes: 10, topics: [topic],
-    questions: items.map(([prompt, choices, correct, explanation]) => ({ topic, prompt, choices, correct, explanation, code: '' })),
+    summary: 'แบบฝึกรายบท', minutes: 40, topics: [topic],
+    questions: [...items, ...extra].map(([prompt, choices, correct, explanation]) => ({ topic, prompt, choices, correct, explanation, code: '' })),
   }
 }
 
