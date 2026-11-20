@@ -19,6 +19,7 @@ import {
   practicePath,
   Exercise,
 } from '@/lib/content'
+import { runPython } from '@/lib/python-runner'
 import { Result, evaluate } from '@/lib/evaluation'
 import { useProgress } from '@/lib/progress'
 import { NeoButton, NeoBadge } from './ui'
@@ -38,7 +39,8 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
     [run, R] = useState<Result | null>(null),
     [submitted, S] = useState<Result | null>(null),
     [notice, N] = useState(''),
-    [xp, X] = useState(false)
+    [xp, X] = useState(false),
+    [busy, setBusy] = useState(false)
   const { data, complete, records, ready, write } = useProgress(),
     reduce = useReducedMotion(),
     index = exercises.findIndex((x) => x.id === e.id),
@@ -50,8 +52,11 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
     write(key, s)
     N('')
   }
-  function check(submit: boolean) {
-    const result = evaluate(e, answer)
+  async function check(submit: boolean) {
+    if (busy) return
+    setBusy(true)
+    const result = code ? await runPython(e, answer) : evaluate(e, answer)
+    setBusy(false)
     R(result)
     setTab(submit ? 'ผลการส่งคำตอบ' : 'กรณีทดสอบ')
     if (submit) {
@@ -121,6 +126,7 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
               <pre>{e.answer}</pre>
             </details>
           )}
+          {busy && <p role="status">กำลังโหลด Python และรันกรณีทดสอบ…</p>}
           <div className="actions">
             {index > 0 && (
               <Link
@@ -225,15 +231,15 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
           <section className="panel spaced">
             <p className="notice">
               {code
-                ? 'ตัวจำลอง Python · เปรียบเทียบโค้ดกับเฉลยในเบราว์เซอร์ โดยไม่มีการรัน Python จริง'
+                ? 'Python จริงในเบราว์เซอร์ · รองรับ NumPy และ Pandas · ครั้งแรกต้องใช้อินเทอร์เน็ตเพื่อโหลดตัวรัน'
                 : 'ระบบจะตรวจคำตอบในเบราว์เซอร์ของคุณ'}
             </p>
             <div className="actions practiceactions">
-              <NeoButton tone="white" onClick={() => check(false)}>
+              <NeoButton disabled={busy} tone="white" onClick={() => check(false)}>
                 <Play size={15} />
                 {code ? 'ทดสอบโค้ด' : 'ตรวจคำตอบ'}
               </NeoButton>
-              <NeoButton onClick={() => check(true)}>
+              <NeoButton disabled={busy} onClick={() => check(true)}>
                 <Send size={15} /> ส่งคำตอบ
               </NeoButton>
             </div>
@@ -252,7 +258,7 @@ export function Practice({ exercise: e }: { exercise: Exercise }) {
               {tab === 'คอนโซล' ? (
                 <pre>
                   {run
-                    ? 'ผลการตรวจแบบจำลอง\n' + run.status + '\n' + run.actual
+                    ? 'ผลการรัน Python\n' + run.status + '\n' + run.actual
                     : 'ยังไม่ได้เริ่มทดสอบ'}
                 </pre>
               ) : (tab === 'กรณีทดสอบ' ? run : submitted) ? (
